@@ -85,3 +85,10 @@ Real GPU point tracking completed in 291.12 seconds including setup; see
 visually inspected. This is point tracking, not custom SAM segmentation or a 3D
 reconstruction. The [bounded stage workflow](CUSTOM_GPU.md) preserves exact
 input and checkpoint hashes between camera, scaffold and photometric stages.
+
+The custom camera stage also completed: 500 optimization steps, finite saved
+camera/bundle tensors, and preserved priors. Initial FOV estimation required the
+upstream fallback, so calibration remains uncertain. Scaffold fitting found 243
+dynamic tracks but its first attempt stopped on a diagnostic image encoding
+error; a tested compatibility fix is being validated. Milestone 03 still needs
+trained Gaussians and inspected reconstructed playback.

@@ -92,7 +92,7 @@ Camera, scaffold and photo stages are available through `--fit-stage`, with
 `--tracks` pointing to successful hash-bound tracking artifacts, `--config` to
 the stage configuration and `--previous` to the completed predecessor archive
 for later stages. Model/depth inputs must match the original frame hashes.
-These stage runners are CPU tested preparation until actual GPU results exist.
+The camera stage has now completed on the real custom clip; scaffold and photometric fitting remain pending.
 The proposed bounded profile uses 500 camera, 1,000 scaffold and 2,000 photometric
 steps. All saved model
 tensors must be finite before a stage is accepted; visual quality is evaluated
@@ -115,7 +115,7 @@ The user subsequently authorized both sizes, preferring 40GB. `--gpu A100` now
 requests ordered 40GB/80GB alternatives and requires both in `authorized_gpus` in
 the evidence record. Both allocations pass the same architecture and CUDA checks;
 other devices or memory sizes still fail. This avoids repeatedly rejecting an
-authorized 80GB allocation. Actual custom point tracking is now demonstrated: 4,096 tracks, 3,382 retained by MoSca, across 48 frames. No custom reconstruction checkpoint is yet demonstrated.
+authorized 80GB allocation. Actual custom point tracking is now demonstrated: 4,096 tracks, 3,382 retained by MoSca, across 48 frames. A finite camera/bundle checkpoint is now demonstrated; no trained Gaussian reconstruction or custom playback is yet demonstrated.
 
 The bounded fitting profile derives from MoSca's
 `profile/demo/demo_fit.yaml` at the pinned revision. It retains upstream parameter
@@ -123,3 +123,27 @@ names and adjusts iteration counts, stage timing and flow-free tracking for this
 experiment. The upstream core copyright/permission notice is preserved in
 [mosca-core-MIT.txt](licenses/mosca-core-MIT.txt). This notice does not relicense
 third-party rasterizers, model weights or data; their separate terms still apply.
+
+## Camera result and scaffold compatibility
+
+The 500-step custom camera solve completed in 27.91 seconds (432.75 seconds
+including setup). All saved tensor values were finite and original input hashes
+were unchanged. The initial FOV search had no interior optimum and used the
+upstream 45-degree fallback; the fitted short-side FOV parameter is 44.20 degrees.
+This is estimated calibration, not geometric ground truth. The combined training
+objective fell from 0.159262 to 0.031824; it is not a held-out metric.
+
+Using the saved fundamental matrices, scaffold classification finds 243 dynamic
+tracks at a 0.0001 epipolar threshold in at least four frames. Five inspected
+timestamps place these tracks mainly on the cat's head, chest and tail. These
+are motion tracks, not SAM masks or selected Gaussians. See the hash-bound
+[camera evidence](evidence/custom-camera-2026-10-27.json).
+
+The first scaffold attempt stopped at iteration zero while writing a diagnostic
+image: `viz_curve` returns normalized float RGB, which Pillow cannot save as RGB.
+A scoped wrapper on `dynamic_solver.viz_curve` now applies the same clipped
+8-bit conversion already used by `viz_scene` when saving images. It does not
+change model tensors, upstream source files, or the shared image-writing module.
+The regression test reproduces the writer failure and verifies saved pixels,
+input preservation and rejection of nonfinite diagnostic values. GPU validation
+of the corrected scaffold remains pending.

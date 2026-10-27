@@ -183,5 +183,6 @@
   "photo_dyn_error_grow_steps": [],
   "photo_d_model_fetch_only_error_th": -1,
   "consider_photo_error_dyn_id_th": -1,
-  "refilter_curve_by_photo_error_cnt": -1
+  "refilter_curve_by_photo_error_cnt": -1,
+  "photo_viz_move_angle_deg": 3.0
 }

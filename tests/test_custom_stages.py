@@ -76,3 +76,21 @@ class CustomStageTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'nonfinite'):custom_stages.validate_checkpoint(p)
             torch.save({'metadata':'no model'},p)
             with self.assertRaisesRegex(ValueError,'empty'):custom_stages.validate_checkpoint(p)
+
+    def test_curve_diagnostic_converts_normalized_rgb_for_pillow_without_mutation(self):
+        import numpy as np
+        from PIL import Image
+        frame=np.array([[[0.,.5,1.],[-.1,1.1,.25]]],dtype=np.float32)
+        original=frame.copy()
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'diagnostic.png'
+            with self.assertRaises(TypeError):Image.fromarray(frame).save(path)
+            render=custom_stages.uint8_curve_renderer(lambda *args,**kwargs:[frame])
+            result=render('camera',text='step')[0]
+            Image.fromarray(result).save(path)
+            with Image.open(path) as saved:
+                np.testing.assert_array_equal(np.asarray(saved),[[[0,127,255],[0,255,63]]])
+            np.testing.assert_array_equal(frame,original)
+            self.assertEqual(result.dtype,np.uint8)
+            bad=custom_stages.uint8_curve_renderer(lambda:[np.full((2,2,3),np.nan)])
+            with self.assertRaisesRegex(ValueError,'finite'):bad()

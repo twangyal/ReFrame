@@ -45,7 +45,7 @@ depth/tracking and geometry; preparation is not evidence that reconstruction wor
 ## Remaining reconstruction gates
 
 The CPU follow-up now provides 48 depth priors; see [compatibility evidence](PREPROCESSING_CPU.md).
-No point tracks, calibrated cameras, trained Gaussian checkpoint or custom playback
+Point tracks and an estimated camera/bundle solution now exist. No trained Gaussian checkpoint or custom playback
 exist yet. No new SAM
 request was made. Existing sample masks must never be applied to this different
 clip. The hosted SAM one-call allowance remains consumed.

@@ -28,6 +28,9 @@ def main():
     install_camera_alias(canonical_camera,sys.modules)
     from lite_moca_reconstruct import static_reconstruct
     from mosca_reconstruct import scaffold_reconstruct,photometric_reconstruct
+    from lib_mosca import dynamic_solver
+    from scripts.custom_stages import uint8_curve_renderer
+    dynamic_solver.viz_curve=uint8_curve_renderer(dynamic_solver.viz_curve)
     from lib_prior.prior_loading import Saved2D
     from lib_moca.epi_helpers import analyze_track_epi,identify_tracks
     cfg=OmegaConf.create(json.loads(a.config.read_text()))

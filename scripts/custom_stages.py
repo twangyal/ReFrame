@@ -2,6 +2,29 @@
 from pathlib import Path
 
 
+def uint8_curve_renderer(renderer):
+    """Convert only MoSca curve diagnostics from normalized RGB for image writers.
+
+    Matches viz_helper.viz_scene's own save conversion; model tensors and the
+    original visualization function/module remain unchanged.
+    """
+    from functools import wraps
+    import numpy as np
+    @wraps(renderer)
+    def render(*args,**kwargs):
+        result=[]
+        for frame in renderer(*args,**kwargs):
+            frame=np.asarray(frame)
+            if frame.ndim!=3 or frame.shape[-1]!=3 or not np.isfinite(frame).all():
+                raise ValueError('curve diagnostic must be finite RGB')
+            if frame.dtype==np.uint8:result.append(frame)
+            elif np.issubdtype(frame.dtype,np.floating):
+                result.append(np.clip(frame*255,0,255).astype(np.uint8))
+            else:raise ValueError('unsupported curve diagnostic dtype')
+        return result
+    return render
+
+
 def required_inputs(stage):
     camera=('bundle/bundle_cams.pth','bundle/bundle.pth','tracker_epi.npz')
     if stage=='camera':return ()
