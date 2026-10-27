@@ -74,5 +74,37 @@ before accepting scaffold output: upstream's insufficient-dynamic-track fallback
 uses `topk(largest=False)` and may select low-error static tracks. A checkpoint
 alone is not evidence of usable dynamic reconstruction.
 
-GPU execution and custom reconstructed playback remain unverified until recorded
-results and visual inspection are added. CPU staging tests are separate evidence.
+A real A100 40GB run built both rasterizers, passed the independent renderer
+reference and CUDA voxel grouping, then exposed an upstream import defect before
+tracking: `lib_mosca/camera.py` is a regular file containing only
+`../lib_moca/camera.py`. The compatibility adapter binds the canonical
+`lib_moca.camera` module to the expected legacy `camera` name, refusing conflicting
+imports and leaving upstream files unchanged. GPU validation of that correction,
+actual point tracking and reconstructed playback are still pending.
+
+Subsequent bounded runs can use `--cumulative-budget-usd 30` only under the
+existing explicit credit authorization, with fresh balance/control/rate evidence.
+The default envelope remains $5 and the per-run conservative estimate remains
+$3.4285. This does not permit paid overage or new Meta inference.
+
+Camera, scaffold and photo stages are available through `--fit-stage`, with
+`--tracks` pointing to successful hash-bound tracking artifacts, `--config` to
+the stage configuration and `--previous` to the completed predecessor archive
+for later stages. Model/depth inputs must match the original frame hashes.
+These stage runners are CPU tested preparation until actual GPU results exist.
+
+## Allocation diagnosis
+
+A subsequent exact `A100-40GB` request received a detected
+`NVIDIA A100-SXM4-80GB` (85,118,156,800 bytes). The guard rejected it after 3.4
+seconds, before setup or inference. The SDK preserves the requested GPU string;
+no client fallback is configured. Modal's per-app billing report was not yet
+populated, so free-upgrade billing is not established for this allocation.
+
+`--gpu A100-80GB` is prepared as an explicit alternative. It requires matching
+`explicit_gpu_authorization` in the fresh operator evidence record; the default
+remains 40GB and different allocations are rejected. Published/provider rates at
+inspection were $2.50/hour for 80GB and $2.10/hour for 40GB. A 15-minute run adds
+at most $0.10 GPU cost, within the same conservative $3.4285 whole-run estimate.
+This configuration has not been launched. No custom tracking result or custom
+reconstruction checkpoint is yet demonstrated.

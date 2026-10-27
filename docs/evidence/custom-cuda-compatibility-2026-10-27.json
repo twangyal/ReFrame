@@ -1,0 +1,26 @@
+{
+  "kind": "actual-custom-reconstruction-dependency-probe",
+  "hardware": {
+    "name": "NVIDIA A100-SXM4-40GB",
+    "total_memory_bytes": 42429251584,
+    "capability": [
+      8,
+      0
+    ],
+    "torch": "2.1.0",
+    "cuda": "11.8"
+  },
+  "elapsed_seconds": 383.120826981,
+  "rasterizers_compiled": [
+    "diff_gaussian_rasterization_add3",
+    "diff_gaussian_rasterization"
+  ],
+  "independent_renderer_reference_passed": true,
+  "voxel_grid_cuda_check_passed": true,
+  "exit_code": 1,
+  "tracking_inference_ran": false,
+  "failure": "Pinned upstream lib_mosca/camera.py is mode100644, containing ../lib_moca/camera.py; full-training import raises SyntaxError.",
+  "correction_pending_gpu_validation": "Bind canonical lib_moca.camera under both legacy camera and lib_mosca.camera names before imports; preserve original upstream files.",
+  "mosca_revision": "02404d2841b4e0dc2d9074860950bce5da579656",
+  "custom_reconstruction_demonstrated": false
+}

@@ -57,3 +57,13 @@ class ModalGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runner.verify_workspace('different',{'workspace':'twangyal'})
         runner.verify_workspace('twangyal',{'workspace':'twangyal'})
+
+    def test_explicit_gpu_guard_never_silently_accepts_a_different_allocation(self):
+        from scripts.modal_smoke_worker import validate_gpu
+        validate_gpu('NVIDIA A100-SXM4-40GB',40*1024**3,'A100-40GB')
+        validate_gpu('NVIDIA A100-SXM4-80GB',80*1024**3,'A100-80GB')
+        for name,size,expected in [('NVIDIA A100-SXM4-80GB',80*1024**3,'A100-40GB'),
+                                   ('NVIDIA A100-SXM4-40GB',40*1024**3,'A100-80GB'),
+                                   ('NVIDIA H100',80*1024**3,'A100-80GB'),
+                                   ('NVIDIA A100',80*1024**3,'unknown')]:
+            with self.subTest(name=name,expected=expected),self.assertRaises(ValueError):validate_gpu(name,size,expected)

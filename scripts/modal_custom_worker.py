@@ -20,7 +20,7 @@ def remote_entrypoint():
     result.update(elapsed_seconds=time.monotonic()-started,artifacts_are_incomplete_diagnostics=result['exit_code']!=0)
     yield {'kind':'result','result':result}
     out=Path('/tmp/custom-output')
-    if out.exists():yield from emit_artifacts(out)
+    if out.exists():yield from emit_artifacts(out,suffixes={'.json','.npz','.png','.zip'},max_bytes=512*1024**2)
     else:yield {'kind':'complete','files':0}
 
 
@@ -31,10 +31,12 @@ def main():
     hardware=dict(name=properties.name,total_memory_bytes=properties.total_memory,
         capability=list(torch.cuda.get_device_capability()),torch=torch.__version__,cuda=torch.version.cuda)
     (out/'hardware.json').write_text(json.dumps(hardware,indent=2))
-    if 'A100' not in properties.name or not 35*1024**3<=properties.total_memory<=45*1024**3:
-        raise RuntimeError(f'Expected A100 40GB; observed {hardware}')
+    from scripts.modal_smoke_worker import validate_gpu
+    settings=json.loads(Path('/smoke/resource-settings.json').read_text())
+    validate_gpu(properties.name,properties.total_memory,settings['gpu'])
     env={**os.environ,'PYTHONPATH':'/smoke:/smoke/mosca','GS_BACKEND':'native_add3','OMP_NUM_THREADS':'2',
-         'MAX_JOBS':'2','TORCH_CUDA_ARCH_LIST':'8.0','PIP_DISABLE_PIP_VERSION_CHECK':'1'}
+         'MAX_JOBS':'2','TORCH_CUDA_ARCH_LIST':'8.0','PIP_DISABLE_PIP_VERSION_CHECK':'1',
+         'REFRAME_EXPECTED_GPU':settings['gpu']}
     def run(cmd,seconds):
         remaining=800-(time.monotonic()-started)
         if remaining<=0:raise TimeoutError('custom probe time budget exhausted')
@@ -58,8 +60,22 @@ def main():
     run(['conda','install','--offline','--no-deps','--yes',str(package)],90)
     shutil.copytree('/smoke/mosca/lib_render/diff-gaussian-rasterization-alphadep','/tmp/native-build')
     run([sys.executable,'-m','pip','install','--no-cache-dir','--no-deps','--no-build-isolation','/tmp/native-build'],180)
-    run([sys.executable,'/smoke/scripts/modal_custom_worker.py','--track'],max(1,800-(time.monotonic()-started)))
-    report=json.loads((out/'report.json').read_text());report['whole_worker_seconds']=time.monotonic()-started
+    if Path('/smoke/stage.json').exists():
+        from scripts.training_artifacts import pack,unpack
+        settings=json.loads(Path('/smoke/stage.json').read_text())
+        ws=Path('/tmp/custom-workspace');shutil.copytree('/smoke/priors',ws)
+        fit=Path('/tmp/custom-fit')
+        if Path('/smoke/previous.zip').exists():unpack(Path('/smoke/previous.zip'),fit)
+        try:
+            run([sys.executable,'/smoke/scripts/run_custom_stage.py','--stage',settings['stage'],
+                 '--mosca','/smoke/mosca','--workspace',str(ws),'--output',str(fit),'--config','/smoke/fit-config.json'],max(1,800-(time.monotonic()-started)))
+        finally:
+            if fit.exists():pack(fit,out/'stages.zip')
+        report=json.loads((fit/(settings['stage']+'-report.json')).read_text())
+    else:
+        run([sys.executable,'/smoke/scripts/modal_custom_worker.py','--track'],max(1,800-(time.monotonic()-started)))
+        report=json.loads((out/'report.json').read_text())
+    report['whole_worker_seconds']=time.monotonic()-started
     report['packages']=subprocess.check_output([sys.executable,'-m','pip','freeze'],text=True)
     (out/'report.json').write_text(json.dumps(report,indent=2))
 
@@ -72,6 +88,9 @@ def track():
     pos=torch.tensor([[0.,0.,0.],[.1,0,0],[2.,0,0]],device='cuda')
     clusters=voxel_grid(pos,size=1.)
     assert clusters[0]==clusters[1] and clusters[0]!=clusters[2]
+    from lib_moca import camera as canonical_camera
+    from scripts.custom_stages import install_camera_alias
+    install_camera_alias(canonical_camera,sys.modules)
     from mosca_reconstruct import scaffold_reconstruct,photometric_reconstruct
     from lite_moca_reconstruct import static_reconstruct
     from lib_prior.tracking import bootstapir_wrapper as tracker

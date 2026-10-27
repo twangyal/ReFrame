@@ -8,6 +8,14 @@ import sys
 import time
 
 
+def validate_gpu(name,total_memory,expected='A100-40GB'):
+    bounds={'A100-40GB':(35,45),'A100-80GB':(75,85)}
+    if expected not in bounds:raise ValueError('unreviewed GPU configuration')
+    lower,upper=bounds[expected]
+    if 'A100' not in name or not lower*1024**3<=total_memory<=upper*1024**3:
+        raise ValueError(f'expected exactly {expected}; observed {name}, {total_memory} bytes; no implicit substitution')
+
+
 def remote_entrypoint():
     """Import this staged module on the GPU; do not serialize client bytecode."""
     result = subprocess.run([sys.executable,'/smoke/scripts/modal_smoke_worker.py'],
@@ -41,9 +49,7 @@ def main():
     if not torch.__version__.startswith('2.1.0') or torch.cuda.get_device_capability() != (8,0):
         raise RuntimeError('unexpected Torch version or GPU architecture')
     properties = torch.cuda.get_device_properties(0)
-    if 'A100' not in properties.name or not 35*1024**3 <= properties.total_memory <= 45*1024**3:
-        raise RuntimeError(f'expected exactly A100 40GB; observed {properties.name}, '
-                               f'{properties.total_memory} bytes; no implicit GPU substitution')
+    validate_gpu(properties.name,properties.total_memory,os.environ.get('REFRAME_EXPECTED_GPU','A100-40GB'))
     source = Path('/smoke/mosca/lib_render/diff-gaussian-rasterization-alphadep-add3')
     build = Path('/tmp/native-add3-build')
     shutil.copytree(source,build)
