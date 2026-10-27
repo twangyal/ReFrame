@@ -67,3 +67,9 @@ class ModalGateTests(unittest.TestCase):
                                    ('NVIDIA H100',80*1024**3,'A100-80GB'),
                                    ('NVIDIA A100',80*1024**3,'unknown')]:
             with self.subTest(name=name,expected=expected),self.assertRaises(ValueError):validate_gpu(name,size,expected)
+
+    def test_authorized_a100_preference_accepts_only_40_or_80(self):
+        from scripts.modal_smoke_worker import validate_gpu
+        for size in (40,80):validate_gpu('NVIDIA A100',size*1024**3,'A100')
+        for name,size in [('NVIDIA H100',80),('NVIDIA A100',20),('NVIDIA A100',60)]:
+            with self.assertRaises(ValueError):validate_gpu(name,size*1024**3,'A100')

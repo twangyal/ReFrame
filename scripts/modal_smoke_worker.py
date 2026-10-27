@@ -9,10 +9,9 @@ import time
 
 
 def validate_gpu(name,total_memory,expected='A100-40GB'):
-    bounds={'A100-40GB':(35,45),'A100-80GB':(75,85)}
+    bounds={'A100-40GB':[(35,45)],'A100-80GB':[(75,85)],'A100':[(35,45),(75,85)]}
     if expected not in bounds:raise ValueError('unreviewed GPU configuration')
-    lower,upper=bounds[expected]
-    if 'A100' not in name or not lower*1024**3<=total_memory<=upper*1024**3:
+    if 'A100' not in name or not any(lower*1024**3<=total_memory<=upper*1024**3 for lower,upper in bounds[expected]):
         raise ValueError(f'expected exactly {expected}; observed {name}, {total_memory} bytes; no implicit substitution')
 
 

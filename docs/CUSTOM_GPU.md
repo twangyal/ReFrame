@@ -24,10 +24,10 @@ explicit runner modules, hash-verified source images/depth maps, official
 BootsTAPIR weights and the matching compiled clustering wheel. It does not upload
 repository history, environment variables, credentials, or unrelated files.
 
-- One A100 40GB, two CPU cores, 16GiB requested RAM, 900-second invocation;
+- One A100 (40GB preferred, 80GB authorized), two CPU cores, 16 GiB requested RAM, 900-second invocation;
   850-second subprocess cap leaves time to transfer diagnostics.
 - No persistent Volume or automatic invocation retry. Default ephemeral disk
-  billing is conservatively included as another 25.6GiB memory allowance.
+  billing is conservatively included as another 25.6 GiB memory allowance.
 - Conservative estimate $3.4285 includes $2 overhead allowance; this is an
   estimate, not a provider billing cap. Fresh account controls remain mandatory.
 - Builds both upstream rasterizers, repeats the independent native contribution
@@ -78,9 +78,10 @@ A real A100 40GB run built both rasterizers, passed the independent renderer
 reference and CUDA voxel grouping, then exposed an upstream import defect before
 tracking: `lib_mosca/camera.py` is a regular file containing only
 `../lib_moca/camera.py`. The compatibility adapter binds the canonical
-`lib_moca.camera` module to the expected legacy `camera` name, refusing conflicting
-imports and leaving upstream files unchanged. GPU validation of that correction,
-actual point tracking and reconstructed playback are still pending.
+`lib_moca.camera` module to both `camera` and `lib_mosca.camera`, refusing
+conflicting imports and leaving upstream files unchanged. The corrected imports
+and actual point tracking passed on a real A100 80GB
+(see evidence/custom-tracking-2026-10-27.json). Reconstructed playback remains pending.
 
 Subsequent bounded runs can use `--cumulative-budget-usd 30` only under the
 existing explicit credit authorization, with fresh balance/control/rate evidence.
@@ -92,6 +93,10 @@ Camera, scaffold and photo stages are available through `--fit-stage`, with
 the stage configuration and `--previous` to the completed predecessor archive
 for later stages. Model/depth inputs must match the original frame hashes.
 These stage runners are CPU tested preparation until actual GPU results exist.
+The proposed bounded profile uses 500 camera, 1,000 scaffold and 2,000 photometric
+steps. All saved model
+tensors must be finite before a stage is accepted; visual quality is evaluated
+separately.
 
 ## Allocation diagnosis
 
@@ -106,5 +111,15 @@ populated, so free-upgrade billing is not established for this allocation.
 remains 40GB and different allocations are rejected. Published/provider rates at
 inspection were $2.50/hour for 80GB and $2.10/hour for 40GB. A 15-minute run adds
 at most $0.10 GPU cost, within the same conservative $3.4285 whole-run estimate.
-This configuration has not been launched. No custom tracking result or custom
-reconstruction checkpoint is yet demonstrated.
+The user subsequently authorized both sizes, preferring 40GB. `--gpu A100` now
+requests ordered 40GB/80GB alternatives and requires both in `authorized_gpus` in
+the evidence record. Both allocations pass the same architecture and CUDA checks;
+other devices or memory sizes still fail. This avoids repeatedly rejecting an
+authorized 80GB allocation. Actual custom point tracking is now demonstrated: 4,096 tracks, 3,382 retained by MoSca, across 48 frames. No custom reconstruction checkpoint is yet demonstrated.
+
+The bounded fitting profile derives from MoSca's
+`profile/demo/demo_fit.yaml` at the pinned revision. It retains upstream parameter
+names and adjusts iteration counts, stage timing and flow-free tracking for this
+experiment. The upstream core copyright/permission notice is preserved in
+[mosca-core-MIT.txt](licenses/mosca-core-MIT.txt). This notice does not relicense
+third-party rasterizers, model weights or data; their separate terms still apply.

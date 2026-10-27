@@ -51,7 +51,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--execute',action='store_true')
     for name in ('approval','mosca','priors','weight','wheel','out'):p.add_argument('--'+name,type=Path)
-    p.add_argument('--gpu',choices=['A100-40GB','A100-80GB'],default='A100-40GB')
+    p.add_argument('--gpu',choices=['A100-40GB','A100-80GB','A100'],default='A100-40GB')
     p.add_argument('--fit-stage',choices=['camera','scaffold','photo'])
     for name in ('tracks','config','previous'):p.add_argument('--'+name,type=Path)
     p.add_argument('--cumulative-budget-usd',type=float,default=5,help='explicit verified existing-credit envelope, never above 30')
@@ -61,7 +61,9 @@ def main():
         print(json.dumps({**PLAN,'kind':args.fit_stage or 'custom-tracking-compatibility','queries':4096,'frames':48,'sam_calls':0,'cumulative_budget_usd':budget,'gpu':args.gpu},indent=2));return
     if not all(getattr(args,k) for k in ('approval','mosca','priors','weight','wheel','out')):p.error('execution requires explicit inputs, new output and approval evidence')
     approval=json.loads(args.approval.read_text());validate_approval(approval,cumulative_budget_usd=budget)
-    if args.gpu!='A100-40GB' and approval.get('explicit_gpu_authorization')!=args.gpu:
+    if args.gpu=='A100' and set(approval.get('authorized_gpus',[]))!={'A100-40GB','A100-80GB'}:
+        raise ValueError('A100 preference requires authorization for both memory sizes')
+    if args.gpu not in ('A100-40GB','A100') and approval.get('explicit_gpu_authorization')!=args.gpu:
         raise ValueError('nondefault GPU requires explicit resource authorization in the evidence record')
     args.out.mkdir(parents=True,exist_ok=False)
     with tempfile.TemporaryDirectory(prefix='reframe-custom-') as temporary:
@@ -100,7 +102,8 @@ def main():
         app=modal.App('reframe-custom-tracking',include_source=False)
         image=modal.Image.from_registry(IMAGE).env({'PYTHONPATH':'/smoke'}).add_local_dir(source,'/smoke',copy=False)
         from scripts.modal_custom_worker import remote_entrypoint
-        worker=app.function(image=image,gpu=args.gpu,cpu=(2,2),memory=(16384,16384),routing_region='us-east',
+        requested_gpu=['A100-40GB','A100-80GB'] if args.gpu=='A100' else args.gpu
+        worker=app.function(image=image,gpu=requested_gpu,cpu=(2,2),memory=(16384,16384),routing_region='us-east',
             timeout=900,startup_timeout=120,min_containers=0,max_containers=1,buffer_containers=0,
             scaledown_window=2,single_use_containers=True,serialized=False)(remote_entrypoint)
         # Generators have no retries in this SDK. No Volumes, secrets or persistent disks.

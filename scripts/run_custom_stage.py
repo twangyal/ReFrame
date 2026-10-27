@@ -14,7 +14,7 @@ def main():
     for name in ['mosca','workspace','output','config']:p.add_argument('--'+name,type=Path,required=True)
     a=p.parse_args();os.environ['GS_BACKEND']='native_add3'
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-    from scripts.custom_stages import validate_predecessor,validate_binding,require_dynamic_evidence
+    from scripts.custom_stages import validate_predecessor,validate_binding,require_dynamic_evidence,validate_checkpoint
     from scripts.custom_tracking import digest
     validate_predecessor(a.output,a.stage)
     target={'camera':'bundle/bundle_cams.pth','scaffold':'mosca/mosca.pth','photo':'photometric_cam.pth'}[a.stage]
@@ -55,6 +55,7 @@ def main():
         function={'camera':static_reconstruct,'scaffold':scaffold_reconstruct,'photo':photometric_reconstruct}[a.stage]
         function(str(a.workspace),str(a.output),cfg)
         if not (a.output/target).is_file():raise RuntimeError('upstream omitted expected stage output')
+        report['checkpoint_tensor_elements']={str(p.relative_to(a.output)):validate_checkpoint(p) for p in a.output.rglob('*.pth')}
         report['passed']=True
     finally:
         report.update(elapsed_seconds=time.monotonic()-started,

@@ -65,3 +65,14 @@ class CustomStageTests(unittest.TestCase):
             report['passed']=True;record.write_text(json.dumps(report))
             (root/'bundle/bundle.pth').write_bytes(b'changed')
             with self.assertRaises(ValueError):custom_stages.validate_binding(root,'scaffold',inputs)
+
+    def test_checkpoint_validation_rejects_nonfinite_and_empty_tensor_states(self):
+        import torch
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/'checkpoint.pth'
+            torch.save({'nested':{'positions':torch.ones(2,3)},'count':3},p)
+            self.assertEqual(custom_stages.validate_checkpoint(p),6)
+            torch.save({'positions':torch.tensor([float('nan')])},p)
+            with self.assertRaisesRegex(ValueError,'nonfinite'):custom_stages.validate_checkpoint(p)
+            torch.save({'metadata':'no model'},p)
+            with self.assertRaisesRegex(ValueError,'empty'):custom_stages.validate_checkpoint(p)

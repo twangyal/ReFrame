@@ -3,7 +3,7 @@
 Phase 1 is incomplete. Published-scene reconstruction access, official hosted SAM
 tracking, exact-frame alignment and persistent Gaussian association are
 demonstrated. Milestone 06 now has qualified sample evidence from the cleanup validation;
-milestone 03 custom 3–5-second video reconstruction has not run. A working sample
+milestone 03 custom 3–5-second video reconstruction is not yet demonstrated. A working sample
 fallback is not a claim of completing that custom-video milestone.
 
 The raw sample selection has 8,227 dynamic + 2 static rows. A separately saved manual
@@ -16,9 +16,9 @@ unvalidated. No Phase 2 editor or transformation is claimed.
 
 | Roadmap milestone and exit criterion | Evidence and status |
 | --- | --- |
-| 01 — Environment & GPU setup (CORE): MoSca dependencies install; GPU inference succeeds locally or remotely | **Demonstrated for reconstruction playback:** pinned environment/package inventories, native CUDA reference test and A100 render. Full preprocessing/training dependencies remain unvalidated. |
+| 01 — Environment & GPU setup (CORE): MoSca dependencies install; GPU inference succeeds locally or remotely | **Demonstrated for reconstruction playback:** pinned environment/package inventories, native CUDA reference test and A100 render. Both rasterizers, full training imports and real BootsTAPIR point inference now pass; camera/scaffold/photo execution remains unverified. |
 | 02 — Known-good MoSca playback (CORE): provided dynamic reconstruction renders at multiple timestamps and viewpoints | **Demonstrated:** preserved Balloon2 checkpoint, camera parameters, renderer and inspected source/nearby views at frames 0/6/11. |
-| 03 — Custom short-video reconstruction (TARGET): a continuous 3–5-second input reconstructs with usable dynamic motion | **Outstanding:** a CC0 four-second clip is selected and 48 images prepared (CUSTOM_CLIP.md); 48 CPU depth priors pass the actual MoSca loader; point tracking, CUDA training compatibility and measured training budget remain; no custom checkpoint or playback. CPU input preparation is implemented. |
+| 03 — Custom short-video reconstruction (TARGET): a continuous 3–5-second input reconstructs with usable dynamic motion | **Outstanding:** a CC0 four-second clip is selected and 48 images prepared (CUSTOM_CLIP.md); 48 CPU depth priors pass the actual MoSca loader; real BootsTAPIR tracking retains 3,382 of 4,096 points after MoSca filtering; camera solving, scaffold fitting and Gaussian playback remain unverified; no custom checkpoint or playback. CPU input preparation is implemented. |
 | 04 — Meta SAM 3.1 segmentation (CORE): chosen object masked/tracked across the same source frames | **Demonstrated on sample:** one hosted request, cached masks, returned object ID 0 through all 12 exact source frames and inspected overlay. No custom-clip inference. |
 | 05 — Frame, time & camera alignment (CORE): agreement on order, timestamps, resolution and projection | **Demonstrated within sample index domain:** exact source pixels/order, mask dimensions, calibrated MoSca projection and reprojection comparisons. Synthetic MP4 timing is recorded; original acquisition cadence is unknown. No continuous-time interpolation claim. |
 | 06 — 2D mask to 4D Gaussian association (CORE): membership isolates a coherent object across time | **Qualified sample exit criterion demonstrated:** checkpoint-bound 8,227-dynamic selection rendered and visually inspected at all 12 discrete timestamps in source/nearby views. Cleanup changes one false-positive pixel at frame11; ragged/missing geometry remains. See RESULTS.md and exact cleanup evidence; no generalization or geometric-correctness claim. |
@@ -57,7 +57,7 @@ Video Diffusion, and Metric3D alignment. These prior models and their full train
 dependency chain are not validated by existing-scene rendering. Inspect each
 license/access requirement, pin and hash weights, and prevent implicit downloads
 or gated-terms acceptance during a smoke test. No prior weights are bundled here.
-The official UniDepth/BootsTAPIR alternate example is also untested in this project.
+The official UniDepth example remains untested; this experiment instead uses externally cached Depth Anything V2 Small priors and the official BootsTAPIR wrapper, now validated on the actual 48 frames.
 
 Default fitting requests 4,000 scaffold and 8,000 photometric steps plus preprocessing
 and the 2,000-step camera bundle-adjustment fallback. First profile a bounded preprocessing subset on the chosen
@@ -79,3 +79,9 @@ excluded row’s absolute visible mass; the exact revision now has GPU measureme
 A [CPU preprocessing follow-up](PREPROCESSING_CPU.md) now verifies real depth
 inference and MoSca loading for all 48 custom frames, using an explicitly
 Apache-licensed alternative depth prior. This is not custom reconstruction.
+
+Real GPU point tracking completed in 291.12 seconds including setup; see
+[evidence](evidence/custom-tracking-2026-10-27.json). Five timestamps were
+visually inspected. This is point tracking, not custom SAM segmentation or a 3D
+reconstruction. The [bounded stage workflow](CUSTOM_GPU.md) preserves exact
+input and checkpoint hashes between camera, scaffold and photometric stages.

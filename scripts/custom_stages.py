@@ -46,3 +46,21 @@ def validate_binding(directory,stage,input_hashes):
     for name in required_inputs(stage):
         if digest(directory/name)!=report['output_sha256'].get(name):
             raise ValueError('predecessor checkpoint hash mismatch')
+
+
+def validate_checkpoint(path):
+    """Check saved tensor state without permitting arbitrary pickle execution."""
+    import torch
+    count=0
+    def visit(value):
+        nonlocal count
+        if isinstance(value,torch.Tensor):
+            if not torch.isfinite(value).all():raise ValueError('nonfinite checkpoint tensor')
+            count+=value.numel()
+        elif isinstance(value,dict):
+            for child in value.values():visit(child)
+        elif isinstance(value,(tuple,list)):
+            for child in value:visit(child)
+    visit(torch.load(path,map_location='cpu',weights_only=True))
+    if count==0:raise ValueError('empty checkpoint tensor state')
+    return count
