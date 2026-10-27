@@ -16,8 +16,8 @@ recognizable; detail, boundaries and unseen geometry have limitations.
 [Custom reconstruction evidence](docs/CUSTOM_RESULTS.md).
 
 These are distinct experiments: no hosted SAM request or semantic Gaussian
-selection was run on the cat. Phase 1 milestones 01–06 are complete with these
-qualified, separate results;
+selection was run on the cat. Phase 1 pipeline evidence exists across these experiments, but custom
+reconstruction quality remains unresolved;
 no Phase 2 editor or transformation is claimed. [Phase 1 audit](docs/PHASE1.md).
 
 ## Setup and checks

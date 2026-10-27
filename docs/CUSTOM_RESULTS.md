@@ -2,8 +2,8 @@
 
 A fresh four-second CC0 clip has been reconstructed with MoSca. The cat remains
 recognizable across all 48 inspected timestamps, and its head turn and tail
-movement persist when the camera is held fixed. This demonstrates usable dynamic
-playback for this limited feasibility case. It does not establish accurate 3D
+movement persist when the camera is held fixed. This demonstrates recognizable dynamic
+playback for this limited feasibility case, with substantial visible blur. It does not establish accurate 3D
 geometry or robustness on arbitrary footage.
 
 The input is Dzkouslavia's **Black Cat walking**, a continuous 5–9 second excerpt;
@@ -81,3 +81,19 @@ has been performed.
 [checkpoint reload / final playback](evidence/custom-playback-2026-10-27.json) records bind measurements to exact
 inputs and checkpoints. Original footage, model weights, checkpoints and rendered
 assets remain separate from the published code repository.
+
+## Controlled quality follow-up (in progress)
+
+Native PNGs already show the blur. Across 48 matched states, export-to-native
+RGB PSNR averages 35.16 dB (source camera) and 35.58 dB (nearby); native source
+fit remains 22.58 dB. Compression contributes less degradation than reconstruction.
+The original video is1920×1080, prepared clip960×540, and fitting/native renders
+480×270. Preview panels are pasted at native size.
+
+One approved 4,000-step experiment keeps exactly the same inputs and resolution.
+Only the total-step config changes; upstream also stretches duration-dependent
+learning-rate/densification schedules. This reruns appearance fitting from the
+preserved scaffold, not an optimizer resume. Hard invocation cap25min, one
+A10040GB preferred/80GB fallback, no automatic retries or new model inference.
+The conservative whole-run estimate is4.2672USD within a4.30USD planning ceiling.
+No result or visual improvement is claimed until the run and comparison finish.

@@ -123,3 +123,21 @@ def validate_checkpoint(path):
     visit(torch.load(path,map_location='cpu',weights_only=True))
     if count==0:raise ValueError('empty checkpoint tensor state')
     return count
+
+
+from contextlib import contextmanager
+
+@contextmanager
+def finite_loss_guard():
+    """Abort on nonfinite backward inputs; restore PyTorch after this local stage."""
+    import torch
+    original=torch.Tensor.backward
+    def checked(tensor,*args,**kwargs):
+        if not torch.isfinite(tensor.detach()).all().item():
+            raise FloatingPointError('nonfinite training loss; refusing backward')
+        return original(tensor,*args,**kwargs)
+    torch.Tensor.backward=checked
+    try:
+        yield
+    finally:
+        torch.Tensor.backward=original

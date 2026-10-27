@@ -50,6 +50,7 @@ def stage(mosca,priors,weight,wheel,destination):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--execute',action='store_true')
+    p.add_argument('--quality-fit',action='store_true',help='explicit 4000-step photo experiment, 25-minute cap and 4.30-dollar ceiling')
     for name in ('approval','mosca','priors','weight','wheel','out'):p.add_argument('--'+name,type=Path)
     p.add_argument('--gpu',choices=['A100-40GB','A100-80GB','A100'],default='A100-40GB')
     p.add_argument('--fit-stage',choices=['camera','scaffold','photo','playback'])
@@ -57,10 +58,24 @@ def main():
     p.add_argument('--cumulative-budget-usd',type=float,default=5,help='explicit verified existing-credit envelope, never above 30')
     args=p.parse_args()
     budget=args.cumulative_budget_usd
+    from scripts.modal_custom_worker import runtime_limits
+    limits=runtime_limits(args.quality_fit)
+    plan={**PLAN,**limits}
+    if args.quality_fit:
+        if args.fit_stage!='photo':p.error('quality-fit is limited to the approved photo experiment')
+        plan['estimated_ceiling_usd']=round((limits['input_timeout_seconds']+120+2)/3600*(4+2*.10+41.6*.02)+2,4)
+        if plan['estimated_ceiling_usd']>4.30:raise ValueError('quality-fit estimate exceeds authorization')
     if not args.execute:
-        print(json.dumps({**PLAN,'kind':args.fit_stage or 'custom-tracking-compatibility','queries':4096,'frames':48,'sam_calls':0,'cumulative_budget_usd':budget,'gpu':args.gpu},indent=2));return
+        print(json.dumps({**plan,'kind':args.fit_stage or 'custom-tracking-compatibility','queries':4096,'frames':48,'sam_calls':0,'cumulative_budget_usd':budget,'gpu':args.gpu},indent=2));return
     if not all(getattr(args,k) for k in ('approval','mosca','priors','weight','wheel','out')):p.error('execution requires explicit inputs, new output and approval evidence')
-    approval=json.loads(args.approval.read_text());validate_approval(approval,cumulative_budget_usd=budget)
+    if args.quality_fit:
+        if args.config is None:p.error('quality-fit requires its config')
+        base=json.loads((ROOT/'configs/custom-cat-fit.json').read_text())
+        if json.loads(args.config.read_text())!={**base,'photo_total_steps':4000}:
+            raise ValueError('quality-fit may change only photo_total_steps to 4000')
+    approval=json.loads(args.approval.read_text());validate_approval(approval,cumulative_budget_usd=budget,plan=plan)
+    if args.quality_fit and approval.get('quality_fit_4000_authorized') is not True:
+        raise ValueError('quality-fit requires explicit experiment authorization')
     if args.gpu=='A100' and set(approval.get('authorized_gpus',[]))!={'A100-40GB','A100-80GB'}:
         raise ValueError('A100 preference requires authorization for both memory sizes')
     if args.gpu not in ('A100-40GB','A100') and approval.get('explicit_gpu_authorization')!=args.gpu:
@@ -69,7 +84,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='reframe-custom-') as temporary:
         source=Path(temporary)
         provenance=stage(args.mosca,args.priors,args.weight,args.wheel,source)
-        (source/'resource-settings.json').write_text(json.dumps({'gpu':args.gpu}))
+        (source/'resource-settings.json').write_text(json.dumps({'gpu':args.gpu,'quality_fit':args.quality_fit}))
         if args.fit_stage:
             if args.tracks is None or args.config is None:p.error('fitting requires saved tracking artifact directory and config')
             if args.fit_stage!='camera' and args.previous is None:p.error('later fitting requires completed predecessor archive')
@@ -87,7 +102,7 @@ def main():
             settings=dict(stage=args.fit_stage,config_sha256=digest(args.config),track_sha256=report['track_sha256'],previous_sha256=digest(args.previous) if args.previous else None)
             (source/'stage.json').write_text(json.dumps(settings,indent=2))
             provenance['fitting']=settings
-        (args.out/'plan.json').write_text(json.dumps({**PLAN,**provenance,'kind':args.fit_stage or 'custom-tracking-compatibility','cumulative_budget_usd':budget,'gpu':args.gpu},indent=2))
+        (args.out/'plan.json').write_text(json.dumps({**plan,**provenance,'kind':args.fit_stage or 'custom-tracking-compatibility','cumulative_budget_usd':budget,'gpu':args.gpu},indent=2))
         import importlib.metadata
         if importlib.metadata.version('modal')!=PLAN['modal_sdk_version']:raise ValueError('incorrect Modal SDK')
         if os.environ.get('MODAL_SERVER_URL','https://api.modal.com')!='https://api.modal.com':raise ValueError('unreviewed API endpoint')
@@ -96,7 +111,7 @@ def main():
         truststore.inject_into_ssl()
         import modal
         verify_workspace(modal.Workspace.from_context().hydrate().name,approval)
-        validate_approval(approval,cumulative_budget_usd=budget)
+        validate_approval(approval,cumulative_budget_usd=budget,plan=plan)
         claim=claim_approval(approval,ROOT/'.cache/modal-launch-claims')
         (args.out/'launch-claim.txt').write_text(str(claim))
         app=modal.App('reframe-custom-tracking',include_source=False)
@@ -104,7 +119,7 @@ def main():
         from scripts.modal_custom_worker import remote_entrypoint
         requested_gpu=['A100-40GB','A100-80GB'] if args.gpu=='A100' else args.gpu
         worker=app.function(image=image,gpu=requested_gpu,cpu=(2,2),memory=(16384,16384),routing_region='us-east',
-            timeout=900,startup_timeout=120,min_containers=0,max_containers=1,buffer_containers=0,
+            timeout=plan['input_timeout_seconds'],startup_timeout=120,min_containers=0,max_containers=1,buffer_containers=0,
             scaledown_window=2,single_use_containers=True,serialized=False)(remote_entrypoint)
         # Generators have no retries in this SDK. No Volumes, secrets or persistent disks.
         from scripts.artifact_stream import receive_artifacts

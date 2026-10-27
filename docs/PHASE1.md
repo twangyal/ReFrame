@@ -1,10 +1,12 @@
 # Phase 1 evidence audit
 
-Phase 1 milestones 01–06 and Gate A are complete with qualified evidence from
-**two distinct experiments**: Balloon2 supplies hosted SAM-to-Gaussian selection;
-the fresh CC0 cat clip supplies custom reconstruction. Saved cat models were
-reloaded, all 48 native source/nearby pairs inspected, and the four-second
-comparison video fully decoded and hash-verified. Stop here before Phase 2.
+Phase 1 has pipeline evidence for milestones 01–06 and Gate A across two
+experiments: Balloon2 supplies hosted SAM-to-Gaussian selection, while the fresh
+CC0 cat clip supplies custom reconstruction. **Visual quality remains unresolved:**
+the cat reconstruction loses substantial detail even before preview encoding.
+The earlier completion statement described execution evidence too broadly.
+A single approved 4,000-step, same-resolution fitting comparison is in progress;
+no quality improvement is claimed yet. Phase 2 remains stopped.
 
 | Roadmap milestone | Evidence and status |
 | --- | --- |

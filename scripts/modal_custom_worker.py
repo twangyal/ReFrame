@@ -8,11 +8,20 @@ import sys
 import time
 
 
+def runtime_limits(quality_fit=False):
+    if type(quality_fit) is not bool:raise ValueError('quality_fit must be boolean')
+    return dict(worker_timeout_seconds=1400 if quality_fit else 800,
+                child_timeout_seconds=1450 if quality_fit else 850,
+                input_timeout_seconds=1500 if quality_fit else 900)
+
+
 def remote_entrypoint():
     from scripts.artifact_stream import emit_artifacts
     started=time.monotonic()
+    settings=json.loads(Path('/smoke/resource-settings.json').read_text())
+    limits=runtime_limits(settings.get('quality_fit',False))
     try:
-        r=subprocess.run([sys.executable,'/smoke/scripts/modal_custom_worker.py'],cwd='/smoke',capture_output=True,text=True,timeout=850)
+        r=subprocess.run([sys.executable,'/smoke/scripts/modal_custom_worker.py'],cwd='/smoke',capture_output=True,text=True,timeout=limits['child_timeout_seconds'])
         result=dict(exit_code=r.returncode,stdout=r.stdout[-100000:],stderr=r.stderr[-100000:])
     except subprocess.TimeoutExpired as e:
         def tail(v):return (v.decode(errors='replace') if isinstance(v,bytes) else v or '')[-100000:]
@@ -33,12 +42,13 @@ def main():
     (out/'hardware.json').write_text(json.dumps(hardware,indent=2))
     from scripts.modal_smoke_worker import validate_gpu
     settings=json.loads(Path('/smoke/resource-settings.json').read_text())
+    limits=runtime_limits(settings.get('quality_fit',False))
     validate_gpu(properties.name,properties.total_memory,settings['gpu'])
     env={**os.environ,'PYTHONPATH':'/smoke:/smoke/mosca','GS_BACKEND':'native_add3','OMP_NUM_THREADS':'2',
          'MAX_JOBS':'2','TORCH_CUDA_ARCH_LIST':'8.0','PIP_DISABLE_PIP_VERSION_CHECK':'1',
          'REFRAME_EXPECTED_GPU':settings['gpu']}
     def run(cmd,seconds):
-        remaining=800-(time.monotonic()-started)
+        remaining=limits['worker_timeout_seconds']-(time.monotonic()-started)
         if remaining<=0:raise TimeoutError('custom probe time budget exhausted')
         print('Stage:',cmd[:5],flush=True)
         subprocess.run(cmd,check=True,env=env,timeout=min(remaining,seconds))
@@ -68,12 +78,12 @@ def main():
         if Path('/smoke/previous.zip').exists():unpack(Path('/smoke/previous.zip'),fit)
         try:
             run([sys.executable,'/smoke/scripts/run_custom_stage.py','--stage',settings['stage'],
-                 '--mosca','/smoke/mosca','--workspace',str(ws),'--output',str(fit),'--config','/smoke/fit-config.json'],max(1,800-(time.monotonic()-started)))
+                 '--mosca','/smoke/mosca','--workspace',str(ws),'--output',str(fit),'--config','/smoke/fit-config.json'],max(1,limits['worker_timeout_seconds']-(time.monotonic()-started)))
         finally:
             if fit.exists():pack(fit,out/'stages.zip')
         report=json.loads((fit/(settings['stage']+'-report.json')).read_text())
     else:
-        run([sys.executable,'/smoke/scripts/modal_custom_worker.py','--track'],max(1,800-(time.monotonic()-started)))
+        run([sys.executable,'/smoke/scripts/modal_custom_worker.py','--track'],max(1,limits['worker_timeout_seconds']-(time.monotonic()-started)))
         report=json.loads((out/'report.json').read_text())
     report['whole_worker_seconds']=time.monotonic()-started
     report['packages']=subprocess.check_output([sys.executable,'-m','pip','freeze'],text=True)

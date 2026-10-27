@@ -38,7 +38,8 @@ PLAN = {
 }
 
 
-def validate_approval(value, *, cumulative_budget_usd=5):
+def validate_approval(value, *, cumulative_budget_usd=5, plan=None):
+    plan = PLAN if plan is None else plan
     if not math.isfinite(cumulative_budget_usd) or not 0<cumulative_budget_usd<=PLAN['total_authorization_existing_credit_usd']:
         raise ValueError('cumulative budget exceeds existing authorization')
     for key in ('no_overage_verified', 'rates_within_plan_verified',
@@ -53,7 +54,7 @@ def validate_approval(value, *, cumulative_budget_usd=5):
     prior = float(value.get('prior_trial_usage_usd', float('nan')))
     pending = float(value.get('prior_billing_uncertainty_allowance_usd', float('nan')))
     if (not math.isfinite(prior) or not math.isfinite(pending) or min(prior,pending) < 0
-            or prior + pending + PLAN['estimated_ceiling_usd'] > cumulative_budget_usd):
+            or prior + pending + plan['estimated_ceiling_usd'] > cumulative_budget_usd):
         raise ValueError('cumulative estimate exceeds selected authorized budget or prior billing evidence is missing')
     when = datetime.fromisoformat(value['verified_at'])
     if when.tzinfo is None or not 0 <= (datetime.now(timezone.utc)-when).total_seconds() <= 3600:

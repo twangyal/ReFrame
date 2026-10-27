@@ -137,3 +137,12 @@ Final validation: the corrected render-only run reloaded all three trained model
 preserved their hashes, and exported 96 native captures without further training.
 All captures and the encoded comparison passed closeout checks; see
 [playback evidence](evidence/custom-playback-2026-10-27.json).
+
+## Explicit quality experiment
+
+`--quality-fit --fit-stage photo --config configs/custom-cat-quality-4000.json`
+selects the separately authorized25min profile. Default runs retain15min.
+Quality mode requires an approval record with `quality_fit_4000_authorized: true`,
+rejects config changes beyond4000total steps, and includes the larger cost in
+the cumulative credit check. Its worker/child/invocation deadlines are1400/1450/1500s.
+This does not implement resumable optimization or authorize further experiments.

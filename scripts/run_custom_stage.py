@@ -83,7 +83,9 @@ def main():
             report['original_trained_checkpoints_preserved']=True
         else:
             function={'camera':static_reconstruct,'scaffold':scaffold_reconstruct,'photo':photometric_reconstruct}[a.stage]
-            function(str(a.workspace),str(a.output),cfg)
+            from scripts.custom_stages import finite_loss_guard
+            with finite_loss_guard():
+                function(str(a.workspace),str(a.output),cfg)
         if not (a.output/target).is_file():raise RuntimeError('upstream omitted expected stage output')
         report['checkpoint_tensor_elements']={str(p.relative_to(a.output)):validate_checkpoint(p) for p in a.output.rglob('*.pth')}
         report['passed']=True
