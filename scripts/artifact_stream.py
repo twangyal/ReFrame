@@ -13,9 +13,9 @@ MAX_FILES=128  # 12 frames x 9 diagnostics + sidecars; still a finite set.
 SUFFIXES={'.json','.npz','.png'}
 
 
-def emit_artifacts(directory):
-    files=sorted(p for p in directory.iterdir() if p.is_file() and p.suffix in SUFFIXES)
-    if len(files)>MAX_FILES or sum(p.stat().st_size for p in files)>MAX_BYTES:
+def emit_artifacts(directory, *, suffixes=SUFFIXES, max_bytes=MAX_BYTES):
+    files=sorted(p for p in directory.iterdir() if p.is_file() and p.suffix in suffixes)
+    if len(files)>MAX_FILES or sum(p.stat().st_size for p in files)>max_bytes:
         raise ValueError('artifact set exceeds bounded transfer')
     for path in files:
         sha=hashlib.sha256()
@@ -31,7 +31,7 @@ def emit_artifacts(directory):
     yield {'kind':'complete','files':len(files)}
 
 
-def receive_artifacts(events,directory):
+def receive_artifacts(events,directory, *, suffixes=SUFFIXES, max_bytes=MAX_BYTES):
     directory.mkdir(parents=True,exist_ok=False)
     active=None;handle=None;count=0;total=0;completed=False;names=set()
     try:
@@ -40,8 +40,8 @@ def receive_artifacts(events,directory):
             kind=event.get('kind')
             if kind=='file':
                 name=event['name'];size=event['bytes']
-                if (active is not None or Path(name).name!=name or Path(name).suffix not in SUFFIXES
-                    or name in names or not isinstance(size,int) or size<0 or total+size>MAX_BYTES or count>=MAX_FILES):
+                if (active is not None or Path(name).name!=name or Path(name).suffix not in suffixes
+                    or name in names or not isinstance(size,int) or size<0 or total+size>max_bytes or count>=MAX_FILES):
                     raise ValueError('invalid artifact header')
                 names.add(name);total+=size;active=event;offset=0;sha=hashlib.sha256()
                 partial=directory/(name+'.part');handle=partial.open('xb')

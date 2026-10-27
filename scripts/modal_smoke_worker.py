@@ -42,7 +42,8 @@ def main():
         raise RuntimeError('unexpected Torch version or GPU architecture')
     properties = torch.cuda.get_device_properties(0)
     if 'A100' not in properties.name or not 35*1024**3 <= properties.total_memory <= 45*1024**3:
-        raise RuntimeError('expected exactly A100 40GB; no implicit GPU substitution')
+        raise RuntimeError(f'expected exactly A100 40GB; observed {properties.name}, '
+                               f'{properties.total_memory} bytes; no implicit GPU substitution')
     source = Path('/smoke/mosca/lib_render/diff-gaussian-rasterization-alphadep-add3')
     build = Path('/tmp/native-add3-build')
     shutil.copytree(source,build)
