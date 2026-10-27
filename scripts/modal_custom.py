@@ -52,7 +52,7 @@ def main():
     p.add_argument('--execute',action='store_true')
     for name in ('approval','mosca','priors','weight','wheel','out'):p.add_argument('--'+name,type=Path)
     p.add_argument('--gpu',choices=['A100-40GB','A100-80GB','A100'],default='A100-40GB')
-    p.add_argument('--fit-stage',choices=['camera','scaffold','photo'])
+    p.add_argument('--fit-stage',choices=['camera','scaffold','photo','playback'])
     for name in ('tracks','config','previous'):p.add_argument('--'+name,type=Path)
     p.add_argument('--cumulative-budget-usd',type=float,default=5,help='explicit verified existing-credit envelope, never above 30')
     args=p.parse_args()

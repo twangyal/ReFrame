@@ -54,11 +54,18 @@ def capture_rgb_diagnostics(renderer,output):
     return render
 
 
+def install_rgb_capture(video_renderer,output):
+    """Patch the function's actual globals, including legacy top-level imports."""
+    namespace=video_renderer.__globals__
+    namespace['viz2d_one_frame']=capture_rgb_diagnostics(namespace['viz2d_one_frame'],output)
+
+
 def required_inputs(stage):
     camera=('bundle/bundle_cams.pth','bundle/bundle.pth','tracker_epi.npz')
     if stage=='camera':return ()
     if stage=='scaffold':return camera
     if stage=='photo':return camera+('mosca/mosca.pth','track_identification.npz')
+    if stage=='playback':return camera+('photometric_cam.pth','photometric_s_model_native_add3.pth','photometric_d_model_native_add3.pth')
     raise ValueError('unknown reconstruction stage')
 
 
@@ -90,7 +97,7 @@ def validate_binding(directory,stage,input_hashes):
     from scripts.custom_tracking import digest
     validate_predecessor(directory,stage)
     if stage=='camera':return
-    predecessor={'scaffold':'camera','photo':'scaffold'}[stage]
+    predecessor={'scaffold':'camera','photo':'scaffold','playback':'photo'}[stage]
     report=json.loads((directory/(predecessor+'-report.json')).read_text())
     if (report.get('passed') is not True or report.get('original_inputs_preserved') is not True
         or report.get('input_sha256')!=input_hashes):

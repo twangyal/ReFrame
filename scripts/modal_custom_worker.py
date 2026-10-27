@@ -43,7 +43,7 @@ def main():
         print('Stage:',cmd[:5],flush=True)
         subprocess.run(cmd,check=True,env=env,timeout=min(remaining,seconds))
     run(['apt-get','-o','Acquire::Retries=0','update'],60)
-    run(['apt-get','-o','Acquire::Retries=0','install','-y','--no-install-recommends','libgl1','libegl1','libglapi-mesa','libgomp1'],60)
+    run(['apt-get','-o','Acquire::Retries=0','install','-y','--no-install-recommends','libgl1','libegl1','libglapi-mesa','libgomp1'],180)
     run([sys.executable,'/smoke/scripts/modal_smoke_worker.py'],300)
     run([sys.executable,'-m','pip','install','--no-cache-dir','--retries','0','--timeout','30',
         'numpy==1.26.4','scipy==1.11.4','matplotlib==3.8.4','Pillow==10.4.0','torch-geometric==2.5.3',

@@ -10,14 +10,14 @@ import time
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--stage',choices=['camera','scaffold','photo'],required=True)
+    p.add_argument('--stage',choices=['camera','scaffold','photo','playback'],required=True)
     for name in ['mosca','workspace','output','config']:p.add_argument('--'+name,type=Path,required=True)
     a=p.parse_args();os.environ['GS_BACKEND']='native_add3'
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
     from scripts.custom_stages import validate_predecessor,validate_binding,require_dynamic_evidence,validate_checkpoint
     from scripts.custom_tracking import digest
     validate_predecessor(a.output,a.stage)
-    target={'camera':'bundle/bundle_cams.pth','scaffold':'mosca/mosca.pth','photo':'photometric_cam.pth'}[a.stage]
+    target={'camera':'bundle/bundle_cams.pth','scaffold':'mosca/mosca.pth','photo':'photometric_cam.pth','playback':'rgb-diagnostics/000000_source.png'}[a.stage]
     if (a.output/target).exists():raise FileExistsError('stage output already exists; preserve it and choose a new copy')
     a.output.mkdir(parents=True,exist_ok=a.stage!='camera')
     sys.path.insert(0,str(a.mosca.resolve()))
@@ -31,11 +31,10 @@ def main():
     from lib_mosca import dynamic_solver
     from scripts.custom_stages import uint8_curve_renderer
     dynamic_solver.viz_curve=uint8_curve_renderer(dynamic_solver.viz_curve)
-    if a.stage=='photo':
-        from lib_mosca import photo_recon_viz_utils
-        from scripts.custom_stages import capture_rgb_diagnostics
-        photo_recon_viz_utils.viz2d_one_frame=capture_rgb_diagnostics(
-            photo_recon_viz_utils.viz2d_one_frame,a.output/'rgb-diagnostics')
+    if a.stage in ('photo','playback'):
+        from lib_mosca import photo_recon
+        from scripts.custom_stages import install_rgb_capture
+        install_rgb_capture(photo_recon.viz2d_total_video,a.output/'rgb-diagnostics')
     from lib_prior.prior_loading import Saved2D
     from lib_moca.epi_helpers import analyze_track_epi,identify_tracks
     cfg=OmegaConf.create(json.loads(a.config.read_text()))
@@ -60,8 +59,31 @@ def main():
                 visibility=s.track_mask.cpu().numpy(),dynamic=dynamic_np,static=static.cpu().numpy())
             report['dynamic_count_without_fallback']=require_dynamic_evidence(dynamic_np,getattr(cfg,'min_curve_num',32))
             del s;torch.cuda.empty_cache()
-        function={'camera':static_reconstruct,'scaffold':scaffold_reconstruct,'photo':photometric_reconstruct}[a.stage]
-        function(str(a.workspace),str(a.output),cfg)
+        if a.stage=='playback':
+            from lib_mosca.static_gs import StaticGaussian
+            from lib_mosca.dynamic_gs import DynSCFGaussian
+            load=lambda name:torch.load(a.output/name,map_location='cpu',weights_only=True)
+            cams=canonical_camera.MonocularCameras.load_from_ckpt(load('photometric_cam.pth')).to('cuda:0').eval()
+            static=StaticGaussian.load_from_ckpt(load('photometric_s_model_native_add3.pth'),device=torch.device('cuda:0')).to('cuda:0').eval()
+            dynamic=DynSCFGaussian.load_from_ckpt(load('photometric_d_model_native_add3.pth'),device=torch.device('cuda:0')).to('cuda:0').eval()
+            for model in (cams,static,dynamic):model.requires_grad_(False)
+            s=(Saved2D(str(a.workspace)).load_dep(cfg.depth_dirname,cfg.depth_boundary_th)
+               .normalize_depth(median_depth=cfg.dep_median).recompute_dep_mask(depth_boundary_th=cfg.depth_boundary_th)
+               .load_track(cfg.tap_mode,min_valid_cnt=cfg.tap_loading_min_valid_cnt)
+               .rescale_perframe_depth_from_bundle(bundle_pth_fn=str(a.output/'bundle/bundle.pth')).to('cuda:0'))
+            if cams.T!=s.T or cams.T!=dynamic.T:raise ValueError('playback frame counts differ')
+            with torch.no_grad():
+                photo_recon.viz2d_total_video(s2d=s,viz_vid_fn=str(a.output/'playback_2dviz.mp4'),
+                    start_from=0,end_at=cams.T-1,skip_t=1,cams=cams,s_model=static,d_model=dynamic,
+                    move_around_angle_deg=cfg.photo_viz_move_angle_deg,print_text=False)
+            if len(list((a.output/'rgb-diagnostics').glob('*.png')))!=cams.T*2:
+                raise RuntimeError('native RGB capture did not cover both views at all times')
+            validate_binding(a.output,a.stage,original)
+            report['training_performed']=False
+            report['original_trained_checkpoints_preserved']=True
+        else:
+            function={'camera':static_reconstruct,'scaffold':scaffold_reconstruct,'photo':photometric_reconstruct}[a.stage]
+            function(str(a.workspace),str(a.output),cfg)
         if not (a.output/target).is_file():raise RuntimeError('upstream omitted expected stage output')
         report['checkpoint_tensor_elements']={str(p.relative_to(a.output)):validate_checkpoint(p) for p in a.output.rglob('*.pth')}
         report['passed']=True

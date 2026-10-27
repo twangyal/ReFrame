@@ -120,3 +120,21 @@ class CustomStageTests(unittest.TestCase):
             self.assertEqual(sorted(p.name for p in root.iterdir()),['000003_nearby.png','000003_source.png'])
             with Image.open(root/'000003_source.png') as saved:
                 np.testing.assert_array_equal(np.asarray(saved),np.broadcast_to([12,34,56],(4,4,3)))
+
+    def test_capture_installs_in_actual_function_import_namespace(self):
+        import numpy as np
+        class Camera:
+            default_H=4
+            default_W=4
+        with tempfile.TemporaryDirectory() as d:
+            namespace={'viz2d_one_frame':lambda *a,**k:np.zeros((4,12,3),dtype=np.uint8)}
+            exec('def video(*args,**kwargs):\n    return viz2d_one_frame(*args,**kwargs)',namespace)
+            custom_stages.install_rgb_capture(namespace['video'],Path(d))
+            namespace['video'](0,None,Camera(),None)
+            self.assertTrue((Path(d)/'000000_source.png').is_file())
+
+    def test_playback_requires_trained_gaussian_checkpoints(self):
+        names=custom_stages.required_inputs('playback')
+        self.assertIn('photometric_cam.pth',names)
+        self.assertIn('photometric_s_model_native_add3.pth',names)
+        self.assertIn('photometric_d_model_native_add3.pth',names)

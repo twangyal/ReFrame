@@ -1,14 +1,23 @@
 # ReFrame — Experiment 01
 
 Research prototype for **official hosted Meta SAM 3.1 masks → persistent MoSca
-Gaussian object selection**. This is a feasibility experiment, not a full editor.
+Gaussian object selection**.
 
-On the published Balloon2 scene, one tracked object maps to a persistent group of
-8,227 dynamic and 2 static Gaussians, inspected at three times from source and
-nearby cameras. Exploratory source-mask IoU: 0.880/0.895/0.868. Ragged boundaries,
-missing patches and two static outliers remain; high 2D agreement does not prove
-correct 3D geometry. Custom-video reconstruction has not been validated, so
-**Phase 1 is not complete**. [Results and limits](docs/RESULTS.md).
+On published Balloon2, a saved selection identifies 8,227 dynamic Gaussians across
+all 12 inspected source/nearby-view timestamps. A manual cleanup removes two
+static outliers from the earlier exploratory selection. Source-mask IoU at three
+checkpoints is approximately 0.880 / 0.895 / 0.868; these are exploratory results,
+not geometric ground truth. [Selection results and limits](docs/RESULTS.md).
+
+A fresh four-second CC0 cat clip has also been reconstructed from new depth and
+point-track priors, with 222,409 static and 37,135 dynamic Gaussians. All 48
+source/fixed/nearby-camera timestamps were inspected. Head/tail motion remains
+recognizable; detail, boundaries and unseen geometry have limitations.
+[Custom reconstruction evidence](docs/CUSTOM_RESULTS.md).
+
+These are distinct experiments: no hosted SAM request or semantic Gaussian
+selection was run on the cat. Phase 1 is in final playback/export verification;
+no Phase 2 editor or transformation is claimed. [Phase 1 audit](docs/PHASE1.md).
 
 ## Setup and checks
 

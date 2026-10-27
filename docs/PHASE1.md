@@ -1,98 +1,39 @@
-# Phase 1 status
+# Phase 1 evidence audit
 
-Phase 1 is incomplete. Published-scene reconstruction access, official hosted SAM
-tracking, exact-frame alignment and persistent Gaussian association are
-demonstrated. Milestone 06 now has qualified sample evidence from the cleanup validation;
-milestone 03 custom 3–5-second video reconstruction is not yet demonstrated. A working sample
-fallback is not a claim of completing that custom-video milestone.
+Phase 1 is in final playback/export verification. The remaining custom-video
+training has succeeded and all 48 diagnostic timestamps have been inspected.
+The final render-only check reloads those saved checkpoints and produces native
+captures for a timed comparison. Stop before Phase 2.
 
-The raw sample selection has 8,227 dynamic + 2 static rows. A separately saved manual
-cleanup revision excludes only the two flagged static outliers and now has its own
-hash-bound render measurements. Source/nearby isolation checks cover all 12 discrete times;
-wide-view geometry, full occlusion/re-entry and continuous-time behavior remain
-unvalidated. No Phase 2 editor or transformation is claimed.
-
-## Exit criteria and evidence
-
-| Roadmap milestone and exit criterion | Evidence and status |
+| Roadmap milestone | Evidence and status |
 | --- | --- |
-| 01 — Environment & GPU setup (CORE): MoSca dependencies install; GPU inference succeeds locally or remotely | **Demonstrated for reconstruction playback:** pinned environment/package inventories, native CUDA reference test and A100 render. Both rasterizers, full training imports and real BootsTAPIR point inference now pass; camera/scaffold/photo execution remains unverified. |
-| 02 — Known-good MoSca playback (CORE): provided dynamic reconstruction renders at multiple timestamps and viewpoints | **Demonstrated:** preserved Balloon2 checkpoint, camera parameters, renderer and inspected source/nearby views at frames 0/6/11. |
-| 03 — Custom short-video reconstruction (TARGET): a continuous 3–5-second input reconstructs with usable dynamic motion | **Outstanding:** a CC0 four-second clip is selected and 48 images prepared (CUSTOM_CLIP.md); 48 CPU depth priors pass the actual MoSca loader; real BootsTAPIR tracking retains 3,382 of 4,096 points after MoSca filtering; camera solving, scaffold fitting and Gaussian playback remain unverified; no custom checkpoint or playback. CPU input preparation is implemented. |
-| 04 — Meta SAM 3.1 segmentation (CORE): chosen object masked/tracked across the same source frames | **Demonstrated on sample:** one hosted request, cached masks, returned object ID 0 through all 12 exact source frames and inspected overlay. No custom-clip inference. |
-| 05 — Frame, time & camera alignment (CORE): agreement on order, timestamps, resolution and projection | **Demonstrated within sample index domain:** exact source pixels/order, mask dimensions, calibrated MoSca projection and reprojection comparisons. Synthetic MP4 timing is recorded; original acquisition cadence is unknown. No continuous-time interpolation claim. |
-| 06 — 2D mask to 4D Gaussian association (CORE): membership isolates a coherent object across time | **Qualified sample exit criterion demonstrated:** checkpoint-bound 8,227-dynamic selection rendered and visually inspected at all 12 discrete timestamps in source/nearby views. Cleanup changes one false-positive pixel at frame11; ragged/missing geometry remains. See RESULTS.md and exact cleanup evidence; no generalization or geometric-correctness claim. |
+| 01 — Environment & GPU setup (CORE) | Pinned CPU/CUDA environments, both native rasterizers, independent compositing reference, real prior inference, camera/scaffold/Gaussian fitting on A100. Local RTX 5070 Ti compatibility remains untested. |
+| 02 — Known-good MoSca playback (CORE) | Preserved published Balloon2 checkpoints, calibrated source/nearby rendering and inspected playback. |
+| 03 — Custom short-video reconstruction (TARGET) | Fresh CC0 four-second cat clip; 48 exact inputs, depth/track priors, 500 camera steps, 1,000 scaffold steps, 2,000 photo steps, finite checkpoints and inspected dynamic playback. Final reload/native export verification is in progress. |
+| 04 — Meta SAM 3.1 segmentation (CORE) | One actual hosted request on Balloon2, cached masks and returned object ID 0 across all 12 exact source frames. No custom-cat SAM inference. |
+| 05 — Frame, time & camera alignment (CORE) | Sample masks match reconstruction frame order/resolution; calibrated reprojection comparisons exist. Sample acquisition cadence is unknown and synthetic playback timing is disclosed. Custom source PTS, resize and checkpoint/input hashes are preserved. |
+| 06 — 2D mask → 4D Gaussian association (CORE) | Renderer contribution evidence yields persistent membership; cleaned 8,227-dynamic selection inspected at all 12 source/nearby times. Manual two-row cleanup is exploratory, not a general rule for static objects. |
 
-**Gate A (Oct 30):** the sample demonstrates that SAM selection can map to actual
-4D scene elements rather than only pixels. Evidence is limited to this scene and
-sampled nearby views. If coherence fails, investigate projection, visibility and
-occlusion before editor work. Passing this limited sample test does not complete
-milestone 03 or all of Phase 1.
+**Gate A:** the sample demonstrates that a SAM-selected object maps to actual
+persistent 4D Gaussians rather than only pixels. The fresh clip independently
+demonstrates reconstruction from new footage. This is not yet a single fresh-clip
+SAM-to-selection experiment, broad-scene validation, or a production editor.
 
+The evidence is qualified: ragged/missing geometry remains; wide novel views,
+full occlusion/re-entry, continuous-time interpolation and geometric correctness
+are unverified. High source-view IoU does not settle those questions. Original
+checkpoints and source inputs are preserved.
 
-## Custom clip prerequisites
+## Reproduction and evidence
 
-A CC0 four-second online clip is now prepared; see [source and inspection](CUSTOM_CLIP.md).
-For additional input, choose a rights-cleared 3–5-second MP4 with one clearly identifiable object,
-reasonable lighting, textured background, no cuts and modest motion. Prepare it:
+- [Inspected MoSca interfaces and association method](FEASIBILITY.md)
+- [Sample selection measurements and limitations](RESULTS.md)
+- [Fresh source/license/preparation](CUSTOM_CLIP.md)
+- [Custom reconstruction results and limits](CUSTOM_RESULTS.md)
+- [Prior license/API audit](PREPROCESSING.md)
+- [CPU depth compatibility](PREPROCESSING_CPU.md)
+- [Bounded remote tracking, stage fitting and playback](CUSTOM_GPU.md)
 
-```bash
-.venv/bin/python -m reframe.custom_scene --video /path/to/clip.mp4 \
-  --out outputs/custom-input --max-frames 48 --max-side 480
-```
-
-This CPU command preserves the source and records original PTS, sampled indices,
-resize and hashes. It creates the actual MoSca `images/` input contract. It is
-not a reconstruction, and the synthetic-video tests are not custom-scene results.
-
-From the pinned MoSca checkout, the actual upstream entrypoints are:
-
-```bash
-python mosca_precompute.py --cfg profile/demo/demo_prep.yaml --ws /path/to/new-scene
-python mosca_reconstruct.py --cfg profile/demo/demo_fit.yaml --ws /path/to/new-scene
-```
-
-Default preprocessing needs RAFT and SpaTracker weights, DepthCrafter plus Stable
-Video Diffusion, and Metric3D alignment. These prior models and their full training
-dependency chain are not validated by existing-scene rendering. Inspect each
-license/access requirement, pin and hash weights, and prevent implicit downloads
-or gated-terms acceptance during a smoke test. No prior weights are bundled here.
-The official UniDepth example remains untested; this experiment instead uses externally cached Depth Anything V2 Small priors and the official BootsTAPIR wrapper, now validated on the actual 48 frames.
-
-Default fitting requests 4,000 scaffold and 8,000 photometric steps plus preprocessing
-and the 2,000-step camera bundle-adjustment fallback. First profile a bounded preprocessing subset on the chosen
-clip, measuring load/inference GPU memory, system RAM, disk and elapsed time;
-then use measurements to bound training. No minimum VRAM or full-training runtime
-is established. The render-phase 1.184 GiB peak is not a training requirement.
-The tested A100/CUDA11.8 environment is not validated for RTX5070Ti/Blackwell.
-
-Completing Phase 1 requires an actual custom reconstruction with preserved inputs,
-configs, checkpoints and renders, plus the association exit checks. Paid execution
-and any further hosted inference require explicit cost/access checks. No new
-model call or cloud job runs merely by invoking the CPU tests or preparation.
-
-The [preprocessing audit](PREPROCESSING.md) records official weight sources,
-observed revisions, model sizes and license uncertainties. No prior weights were
-downloaded or executed by that audit. Cleanup diagnostics now measure each
-excluded row’s absolute visible mass; the exact revision now has GPU measurements in the cleanup evidence.
-
-A [CPU preprocessing follow-up](PREPROCESSING_CPU.md) now verifies real depth
-inference and MoSca loading for all 48 custom frames, using an explicitly
-Apache-licensed alternative depth prior. This is not custom reconstruction.
-
-Real GPU point tracking completed in 291.12 seconds including setup; see
-[evidence](evidence/custom-tracking-2026-10-27.json). Five timestamps were
-visually inspected. This is point tracking, not custom SAM segmentation or a 3D
-reconstruction. The [bounded stage workflow](CUSTOM_GPU.md) preserves exact
-input and checkpoint hashes between camera, scaffold and photometric stages.
-
-The custom camera stage also completed: 500 optimization steps, finite saved
-camera/bundle tensors, and preserved priors. Initial FOV estimation required the
-upstream fallback, so calibration remains uncertain. Scaffold fitting found 243
-dynamic tracks but its first attempt stopped on a diagnostic image encoding
-error; a tested compatibility fix is being validated. Milestone 03 still needs
-trained Gaussians and inspected reconstructed playback.
-
-The corrected scaffold stage has now passed on an A100 40GB: 155 motion nodes
-over 48 timestamps after 1,000 optimization steps. Original inputs are preserved.
-Gaussian appearance fitting and playback review are still required for milestone 03.
+No new Meta call, transformation, desktop editor, public asset publication,
+hackathon submission or legal agreement is implied by this result. Published
+code/test/documentation checkpoints exclude weights, datasets and rendered media.

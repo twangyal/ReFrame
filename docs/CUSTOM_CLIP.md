@@ -42,36 +42,21 @@ Limitations: dark fur has weak internal texture, the tail tip is cropped in earl
 frames, vegetation can move, and handheld parallax is modest. These are risks for
 depth/tracking and geometry; preparation is not evidence that reconstruction works.
 
-## Remaining reconstruction gates
+## Reconstruction outcome
 
-The CPU follow-up now provides 48 depth priors; see [compatibility evidence](PREPROCESSING_CPU.md).
-Point tracks and an estimated camera/bundle solution now exist. No trained Gaussian checkpoint or custom playback
-exist yet. No new SAM
-request was made. Existing sample masks must never be applied to this different
-clip. The hosted SAM one-call allowance remains consumed.
+The fresh clip now has real point tracks, an estimated camera/bundle solution,
+155 motion nodes, trained Gaussian checkpoints and inspected dynamic playback.
+See [measured results and limits](CUSTOM_RESULTS.md) and the
+[stage workflow](CUSTOM_GPU.md). This is separate from the Balloon2 object-selection
+experiment. No new hosted SAM request was made for the cat.
 
-Remote CUDA execution and a verified preprocessing environment remain required.
-No custom reconstruction or new hosted inference has run.
+The actual prior path uses Apache-2.0 Depth Anything V2 Metric VKITTI Small and
+BootsTAPIR, with recorded code/weight revisions and hashes. Metric3D was not used
+because its weight-license coverage was unresolved. RAFT, DepthCrafter and Stable
+Video Diffusion were not required by this path. The [license audit](PREPROCESSING.md)
+and [CPU compatibility record](PREPROCESSING_CPU.md) explain that choice.
 
-See [preprocessing audit](PREPROCESSING.md) for actual model APIs and license
-coverage. The smallest source-supported candidate is Metric3D-small plus
-BootsTAPIR. Metric3D's explicit weight-license coverage is still unverified (the repository
-owner asks commercial users to contact them; see the preprocessing audit);
-BootsTAPIR weights are Apache 2.0 but its vendored visualization has separate terms.
-No Metric3D weights were downloaded. The official Apache-licensed Depth Anything
-V2 Metric Small alternative was downloaded, hash-verified and tested on CPU.
-
-Additional source inspection found that flow can be skipped by the existing
-non-RAFT constructor branch together with `compute_flow=False`; preprocessing
-then estimates dynamic evidence from point tracks. This avoids RAFT weights but
-changes the prior configuration and is not runtime-validated. The real dynamic
-resampling parameter is `n_track_pdynamic` (the demo YAML's `n_track_dynamic`
-is not read at that call). A thin constructor invocation is needed for the
-Metric3D-small option, since the stock config factory does not forward it.
-
-Before training, use a separately bounded compatibility/profile run: native CUDA
-reference and voxel-grid backend, pinned prior imports/weights, 4 representative
-frames for depth, then bounded point tracking. Record memory/time and preserve
-priors/logs. This is not yet a launch-ready dependency lock or a promise that full
-camera/scaffold/photometric fitting finishes within 15 minutes. The chosen source
-clip resolves the input blocker; access and preprocessing verification remain.
+The successful photometric run used an A100 40GB and completed within the bounded
+15-minute invocation. Existing checkpoints and all source data are preserved.
+The experiment does not establish a general minimum VRAM requirement or local
+RTX 5070 Ti compatibility.
