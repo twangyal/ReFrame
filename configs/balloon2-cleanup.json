@@ -1,0 +1,4 @@
+[
+  {"pool":"static","index":97110,"reason":"Exploratory manual ablation of static outlier flagged in refined source/nearby visual review; not established ground truth."},
+  {"pool":"static","index":653118,"reason":"Exploratory manual ablation of static outlier flagged in refined source/nearby visual review; not a rule to discard static objects."}
+]

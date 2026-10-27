@@ -1,0 +1,47 @@
+{
+  "kind": "visual-review-of-real-SAM-to-MoSca-selection",
+  "object_id": "166dfad9-bd7b-5a98-ae91-b0ed44de8807",
+  "reviewed_frames": [
+    0,
+    6,
+    11
+  ],
+  "reviewed_views": [
+    "source",
+    "nearby"
+  ],
+  "reviewed_modes": [
+    "highlight",
+    "isolated"
+  ],
+  "qualified_feasibility_demonstrated": true,
+  "scope": "one12-frame published Balloon2 reconstruction; same selected Gaussian rows evaluated through MoSca deformation; nearby horizontal camera translation only",
+  "selected_dynamic": 8227,
+  "selected_static": 2,
+  "static_indices_flagged_for_review": [
+    97110,
+    653118
+  ],
+  "observations": [
+    "Balloon remains recognizable and highlighted/isolated in all six views.",
+    "Refined group has substantially fewer holes than initial selection.",
+    "No broad person or wall selection is apparent in inspected views.",
+    "Ragged boundaries, missing patches and imperfect texture persist.",
+    "Two static selected rows have high outside-mask contribution ratios at some evaluation frames; retain as documented outliers, not silently remove."
+  ],
+  "geometric_correctness_established": false,
+  "wide_novel_views_tested": false,
+  "full_occlusion_reentry_tested": false,
+  "transformation_tested": false,
+  "evaluation_is_exploratory": true,
+  "training_selected_static_visible_mass": [
+    3.494363784790039,
+    0.0442635640501976,
+    3.5386271476745605
+  ],
+  "training_static_fraction_of_selected_visible_mass": 9.234641765942797e-05,
+  "training_statistic_caveat": "does not establish absolute static contribution in held-out views",
+  "original_automatic_report_preserved": true,
+  "original_report_requires_review_flag": "false success/pending visual-review fields remain in automatic report; this separate review records completed inspection",
+  "original_checkpoints_unchanged": true
+}

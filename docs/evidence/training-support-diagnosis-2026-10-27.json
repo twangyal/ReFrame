@@ -1,0 +1,38 @@
+{
+  "uses": "only nine association training frames; no held-out mask input",
+  "interpretation": "exploratory correction after seeing incomplete first-render coverage, not a new untouched benchmark",
+  "candidates": [
+    {
+      "min_frame_mass": 1.0,
+      "selected_static": 0,
+      "selected_dynamic": 2228,
+      "training_target_visible_mass_recovered": 0.6089650392532349,
+      "training_selected_mass_contamination": 0.010325850918889046,
+      "selected_evidence_variance_mean": 0.0012073716702192421
+    },
+    {
+      "min_frame_mass": 0.25,
+      "selected_static": 1,
+      "selected_dynamic": 6030,
+      "training_target_visible_mass_recovered": 0.8306224346160889,
+      "training_selected_mass_contamination": 0.011355465278029442,
+      "selected_evidence_variance_mean": 0.0017704968607153702
+    },
+    {
+      "min_frame_mass": 0.1,
+      "selected_static": 2,
+      "selected_dynamic": 8227,
+      "training_target_visible_mass_recovered": 0.8718587160110474,
+      "training_selected_mass_contamination": 0.011023590341210365,
+      "selected_evidence_variance_mean": 0.0019748661310157634
+    },
+    {
+      "min_frame_mass": 0.05,
+      "selected_static": 5,
+      "selected_dynamic": 9482,
+      "training_target_visible_mass_recovered": 0.8825502395629883,
+      "training_selected_mass_contamination": 0.010914399288594723,
+      "selected_evidence_variance_mean": 0.0022871251882795596
+    }
+  ]
+}

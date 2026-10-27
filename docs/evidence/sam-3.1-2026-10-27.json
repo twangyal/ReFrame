@@ -1,0 +1,71 @@
+{
+  "video_sha256": "dbc6d1f30c1fa05e8c210b061f107f4eda6ad410073c68e86a997308d2b0d512",
+  "frame_manifest_sha256": "79d78b055e46a4dec3aaf6ac2e58033c4dfbdd7aa1f445a6618118965d6591cb",
+  "frames": 12,
+  "width": 480,
+  "height": 270,
+  "playback_fps": 3.0,
+  "original_timestamps_known": false,
+  "prompt": "green dinosaur balloon",
+  "model": "sam-3.1",
+  "metadata": {
+    "mask_encoding": "one_bit",
+    "include_confidence": "true",
+    "propagation_direction": "both"
+  },
+  "automatic_retries": 0,
+  "response_status": "completed",
+  "elapsed_seconds": 13.578227362000234,
+  "usage": {
+    "input_tokens": 0,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 0,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 0,
+    "video_frames_processed": 50
+  },
+  "cache_key": "bfc0fd60da3ae8feb8759c81bcdc2c23a1e805f460b4b708513efa22cee8d98c",
+  "kind": "actual-hosted-sam-3.1",
+  "inference_requests": 1,
+  "estimated_cost_usd": 0.01,
+  "rate_source": "https://dev.meta.ai/docs/pricing-rate-limits",
+  "billing_invoice_verified": false,
+  "returned_object_id": "0",
+  "observed_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "reliable_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "confidence": 0.9336099624633789,
+  "confidence_caveat": "Identical across frames; not independently calibrated per-frame accuracy.",
+  "alignment": "12 original480x270 frames, exact pixel/hash match; no resize/crop",
+  "manual_overlay_review": "All12frames inspected; balloon remains covered duringrotation, no broad maskspill onto person/wall; boundaryaccuracy not independently measured.",
+  "geometric_selection_demonstrated": false
+}

@@ -1,0 +1,120 @@
+{
+  "source": "MoSca author-published nvidia.zip",
+  "file_id": "1zZiZcCAZzB0ezAH0RO5cBJeMuUnbukBt",
+  "archive_total_bytes": 5734207337,
+  "full_archive_downloaded": false,
+  "method": "bounded HTTP Range and ZIP CRC validation",
+  "members": [
+    {
+      "archive_path": "nvidia/Balloon2/images/000.png",
+      "bytes": 249566,
+      "sha256": "6ed87c5262e418432ef97b4ada7d1a01a0d5787bd7315cfa6009a52d97331577",
+      "crc32": "3d7bf38d"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/001.png",
+      "bytes": 255625,
+      "sha256": "3279cce6680ac1addf75494b5c899a5206e5ff8ac1dcac7cf26a6d5585655021",
+      "crc32": "c2912e0d"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/002.png",
+      "bytes": 250916,
+      "sha256": "27da381c4f1e0af2389c5dc5314cb743a0877ddc0e2eacc1d708504350675a10",
+      "crc32": "d632298e"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/003.png",
+      "bytes": 258757,
+      "sha256": "fd5c76ffc303cf3393286b00769cd7d43f8b8a39a0e8126addbb1d0c1573587e",
+      "crc32": "28c04d96"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/004.png",
+      "bytes": 256695,
+      "sha256": "631695a6a8a8dc6fca8864ec6ce5e01ac6fc641b88f23ec53a7c5712b9f394a9",
+      "crc32": "146f4fda"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/005.png",
+      "bytes": 258023,
+      "sha256": "753d2ca4b6cd07aa88751adbb72ae2011022249a6e765b15d6957f034d87ee82",
+      "crc32": "ac75b09d"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/006.png",
+      "bytes": 257021,
+      "sha256": "fc713cd9ded1d317274de5b1cc5cee7a3886c4617bfa00263f0cf783c3797142",
+      "crc32": "38dc3439"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/007.png",
+      "bytes": 256695,
+      "sha256": "82c419f8ecdb888577e43da872e0526844dea647983e94c4af8616b822eafea5",
+      "crc32": "a585637c"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/008.png",
+      "bytes": 249609,
+      "sha256": "92171fb3fe6526be7086a8638f8f6c8c0bc3d505becac17da0695cfd13235c1b",
+      "crc32": "40c8ae41"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/009.png",
+      "bytes": 255899,
+      "sha256": "766f4fdc672a2dfa4e63a589a34b9fb2f2b4ceb01fdfbe92bbc8327816168205",
+      "crc32": "75bc7360"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/010.png",
+      "bytes": 248221,
+      "sha256": "a53a6f9ad4a4000541b9059ce97573ed6444772ae80c5825e83df7ddfca17a5a",
+      "crc32": "90c15b63"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/images/011.png",
+      "bytes": 245278,
+      "sha256": "ef23440531c16ba807dd8b6887baa3b55c9dc2ac5b3ce97e865193101a7d0cb4",
+      "crc32": "a7d01428"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/logs/nvidia_fit_native_add3_20241128_090115/fit_commandline_args.txt",
+      "bytes": 87,
+      "sha256": "5cd655324b2b9f27b956d6d9e8431472381ea3ad28370c9955f28178f21c916a",
+      "crc32": "e3f1aae9"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/logs/nvidia_fit_native_add3_20241128_090115/photometric_cam.pth",
+      "bytes": 3552,
+      "sha256": "947fabaa98ab899abae4394727495970da79bd0ea18d04a56aac8c0a119cb1d3",
+      "crc32": "6c354968"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/logs/nvidia_fit_native_add3_20241128_090115/photometric_d_model_native_add3.pth",
+      "bytes": 17689447,
+      "sha256": "897a3af669f42755256714a5e405b9c132dc646e7f0493e37f114ac97ffae2ae",
+      "crc32": "5db74236"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/logs/nvidia_fit_native_add3_20241128_090115/photometric_s_model_native_add3.pth",
+      "bytes": 206827847,
+      "sha256": "d3408dc816f5cf6f3c84cd7620a8e5a9dae7608442336893d042ac5740f3f9d3",
+      "crc32": "2025542e"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/poses_bounds.npy",
+      "bytes": 1760,
+      "sha256": "9ad5a437bb1a49d9ae80fc11a6ecc65ed3e2b25b10a3b8100f3623cb9bf555e1",
+      "crc32": "7ef277a8"
+    },
+    {
+      "archive_path": "nvidia/Balloon2/precompute_commandline_args.txt",
+      "bytes": 87,
+      "sha256": "d9db047a83b54ab20cb35f62d2a9425bb42c434746cdeb214d19ade3d33ba07c",
+      "crc32": "4a44d44e"
+    }
+  ],
+  "complete": true,
+  "license_note": "Author-published research sample; redistribution/publication rights not established. Do not publish assets.",
+  "checkpoint_relative": "nvidia/Balloon2/logs/nvidia_fit_native_add3_20241128_090115"
+}

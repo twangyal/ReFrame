@@ -1,0 +1,113 @@
+{
+  "kind": "real-mask-association",
+  "passed": true,
+  "real_scene_selection_demonstrated": false,
+  "sam_called": false,
+  "elapsed_seconds": 210.475333771,
+  "original_hashes_preserved": true,
+  "evaluation": {
+    "mosca_revision": "02404d2841b4e0dc2d9074860950bce5da579656",
+    "backend": "native_add3",
+    "checkpoint_sha256": {
+      "camera": "947fabaa98ab899abae4394727495970da79bd0ea18d04a56aac8c0a119cb1d3",
+      "static": "d3408dc816f5cf6f3c84cd7620a8e5a9dae7608442336893d042ac5740f3f9d3",
+      "dynamic": "897a3af669f42755256714a5e405b9c132dc646e7f0493e37f114ac97ffae2ae"
+    },
+    "static_count": 820726,
+    "dynamic_count": 46174,
+    "frames": 12,
+    "height": 270,
+    "width": 480,
+    "torch": "2.1.0",
+    "cuda": "11.8",
+    "gpu": "NVIDIA A100-SXM4-40GB",
+    "object_id": "166dfad9-bd7b-5a98-ae91-b0ed44de8807",
+    "segmentation": {
+      "schema": 1,
+      "provider": "meta-hosted-sam-3.1",
+      "response_origin": "api",
+      "cache_key": "bfc0fd60da3ae8feb8759c81bcdc2c23a1e805f460b4b708513efa22cee8d98c",
+      "sam_object_id": "0",
+      "prompt": "green dinosaur balloon",
+      "frame_manifest_sha256": "79d78b055e46a4dec3aaf6ac2e58033c4dfbdd7aa1f445a6618118965d6591cb",
+      "min_confidence": 0.5,
+      "missing_confidence": "unreliable"
+    },
+    "train_frames": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10
+    ],
+    "heldout_frames": [
+      0,
+      6,
+      11
+    ],
+    "aggregation": {
+      "foreground_threshold": 0.8,
+      "background_threshold": 0.2,
+      "min_visible_frames": 2,
+      "min_frame_mass": 0.1,
+      "max_frame_weight": 32.0,
+      "max_variance": 0.06
+    },
+    "score_kind": "visible foreground evidence fraction",
+    "selected_static_count": 2,
+    "selected_dynamic_count": 8227,
+    "novel_view_review": "pending human/visual inspection",
+    "real_selection_success": false,
+    "evaluation": [
+      {
+        "frame": 0,
+        "target_observed": true,
+        "reliable": true,
+        "mask_threshold": 0.5,
+        "iou": 0.8800721370604148,
+        "intersection": 3904,
+        "union": 4436,
+        "false_positive_pixels": 201,
+        "false_negative_pixels": 331,
+        "false_positive_fraction": 0.048964677222898906,
+        "static_visible_contamination": 0.45404013991355896,
+        "dynamic_visible_contamination": 0.061934757977724075
+      },
+      {
+        "frame": 6,
+        "target_observed": true,
+        "reliable": true,
+        "mask_threshold": 0.5,
+        "iou": 0.8949063821220052,
+        "intersection": 4445,
+        "union": 4967,
+        "false_positive_pixels": 44,
+        "false_negative_pixels": 478,
+        "false_positive_fraction": 0.009801737580752952,
+        "static_visible_contamination": 0.0,
+        "dynamic_visible_contamination": 0.017835138365626335
+      },
+      {
+        "frame": 11,
+        "target_observed": true,
+        "reliable": true,
+        "mask_threshold": 0.5,
+        "iou": 0.8679790500270905,
+        "intersection": 4806,
+        "union": 5537,
+        "false_positive_pixels": 334,
+        "false_negative_pixels": 397,
+        "false_positive_fraction": 0.06498054474708172,
+        "static_visible_contamination": 0.9961941838264465,
+        "dynamic_visible_contamination": 0.07967598736286163
+      }
+    ],
+    "uncertain_gaussians": 610102,
+    "selected_temporal_evidence_variance_mean": 0.0019748661370812682,
+    "limitation": "fixed row identity is by construction; geometric coherence and SAM ID continuity require visual review"
+  }
+}

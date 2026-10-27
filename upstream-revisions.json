@@ -1,0 +1,5 @@
+{
+  "mosca": {"url": "https://github.com/JiahuiLei/MoSca.git", "commit": "02404d2841b4e0dc2d9074860950bce5da579656"},
+  "feature4x": {"url": "https://github.com/ShijieZhou-UCLA/Feature4X.git", "commit": "15d78299ae5397b95a6102d3cf82a5f853c2f82c"},
+  "sam3": {"url": "https://github.com/facebookresearch/sam3.git", "commit": "f1647e8d0c1d280991f4d1b7d974c2704537fe66"}
+}

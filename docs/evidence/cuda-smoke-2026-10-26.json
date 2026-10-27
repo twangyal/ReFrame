@@ -1,0 +1,31 @@
+{
+  "kind": "synthetic_actual_renderer_smoke",
+  "passed": true,
+  "real_scene_selection_demonstrated": false,
+  "gpu": "NVIDIA A100-SXM4-40GB",
+  "gpu_total_bytes": 42429251584,
+  "torch": "2.1.0",
+  "cuda": "11.8",
+  "elapsed_seconds": 139.89143779100002,
+  "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2022 NVIDIA Corporation\nBuilt on Wed_Sep_21_10:33:58_PDT_2022\nCuda compilation tools, release 11.8, V11.8.89\nBuild cuda_11.8.r11.8/compiler.31833905_0\n",
+  "mosca_revision": "02404d2841b4e0dc2d9074860950bce5da579656",
+  "image": "pytorch/pytorch@sha256:558b78b9a624969d54af2f13bf03fbad27907dbb6f09973ef4415d6ea24c80d9",
+  "test": "tests/test_cuda_renderer.py::ActualRendererTests.test_gradient_matches_forward_basis_renders_with_occlusion",
+  "tests_run": 1,
+  "tests_passed": 1,
+  "tests_skipped": 0,
+  "rtol": 0.002,
+  "atol": 0.0002,
+  "geometry": "three synthetic Gaussians, including two overlapping depth-ordered splats and one zero-opacity splat",
+  "checkpoint_loaded": false,
+  "sam_inference": false,
+  "novel_view_selection_validated": false,
+  "checkpoint_vram_measured": false,
+  "source_sha256": {
+    "mosca/lib_render/gauspl_renderer_native_add3.py": "b682f3a37db251c714ff61cdda4455ae398782bdb2da8adfe01b7ea47d0d05c3",
+    "mosca/lib_render/render_helper.py": "507305587bb114d69cb1e3b66e1b544a55dc9043b420e8fabc2b9c36f8b62f34",
+    "reframe/association.py": "3e690949b6b0800ad14fca2b08d3589eaef5be6388596b5a73882094d2b19a18",
+    "scripts/modal_smoke_worker.py": "4ee99db4c8d29ef3a548e31247264a0939b8d8fef2f73b4085ec77f74f413e62",
+    "tests/test_cuda_renderer.py": "dfa8b619fd07b580c13df67dec73d987e11163cac890d8cbcd9aa9afae09fb50"
+  }
+}
