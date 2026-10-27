@@ -1,0 +1,320 @@
+{
+  "kind": "fresh-custom-checkpoint-reload-and-playback",
+  "date": "2026-10-27",
+  "passed": true,
+  "training_performed": false,
+  "original_trained_checkpoints_preserved": true,
+  "original_inputs_preserved": true,
+  "playback_report_sha256": "8ac9030967e33d0f4e08fdd97afef1ee51f3b895393550c937f8dfd6f2a8455f",
+  "photo_report_sha256": "4e5e296f6ada082fad4cc34180025f8423a48c1cc995143bd13ee8e16bf4ba38",
+  "source_manifest_sha256": "ba85ece230668e6959c141e4042516628f92d735d14cec1a3e91a1cb9e17a154",
+  "prior_report_sha256": "decd455f7b4853cb1e3a6ebbab22b4cf198ed0d2c6c3911030b9938539f80a63",
+  "trained_checkpoint_sha256": {
+    "photometric_cam.pth": "120fd40d79c080a8bfd23561703948f17b2a8c7deb51c97941da2ebde2a85006",
+    "photometric_s_model_native_add3.pth": "2f92a477d4f29804ef0a4de1676628c172f67d8a84251984f31746ae81935b3f",
+    "photometric_d_model_native_add3.pth": "c74fc02654ab808528ab1311e5a606b0eac4e85612536f5a1b867b025773b30e"
+  },
+  "all_recorded_output_hashes_verified": true,
+  "native_captures": 96,
+  "reconstruction_timestamps": 48,
+  "stage_seconds": 25.136422991000018,
+  "whole_remote_run_seconds": 322.897165914,
+  "visual_review": {
+    "status": "inspected",
+    "native_source_and_nearby_frames": 48,
+    "encoded_preview_frame_inspected": 36,
+    "complete_video_decode": "passed",
+    "observations": "Recognizable head/tail motion; blurred detail, tail irregularity and stretched vegetation; no geometric accuracy claim."
+  },
+  "rgb_fit": {
+    "kind": "in-sample-source-rgb-fit",
+    "held_out": false,
+    "geometry_accuracy_claim": false,
+    "frames": [
+      {
+        "frame": 0,
+        "mae": 0.08010070200919875,
+        "psnr_db": 18.731885120490624
+      },
+      {
+        "frame": 1,
+        "mae": 0.07994606834503348,
+        "psnr_db": 18.786032048218484
+      },
+      {
+        "frame": 2,
+        "mae": 0.07847613572177842,
+        "psnr_db": 18.97550070583753
+      },
+      {
+        "frame": 3,
+        "mae": 0.07898459816025175,
+        "psnr_db": 18.94673278096148
+      },
+      {
+        "frame": 4,
+        "mae": 0.07754241305575726,
+        "psnr_db": 19.08677885274949
+      },
+      {
+        "frame": 5,
+        "mae": 0.08026792342451383,
+        "psnr_db": 18.803886077083025
+      },
+      {
+        "frame": 6,
+        "mae": 0.07432695876704591,
+        "psnr_db": 19.383319080880657
+      },
+      {
+        "frame": 7,
+        "mae": 0.07280197490518842,
+        "psnr_db": 19.53785794906602
+      },
+      {
+        "frame": 8,
+        "mae": 0.060993000080690724,
+        "psnr_db": 21.05831284668745
+      },
+      {
+        "frame": 9,
+        "mae": 0.06354842451383845,
+        "psnr_db": 20.710645458947063
+      },
+      {
+        "frame": 10,
+        "mae": 0.06616764504155571,
+        "psnr_db": 20.367567473742767
+      },
+      {
+        "frame": 11,
+        "mae": 0.0701319696602921,
+        "psnr_db": 19.922287664565456
+      },
+      {
+        "frame": 12,
+        "mae": 0.06770789962075364,
+        "psnr_db": 20.219115094472777
+      },
+      {
+        "frame": 13,
+        "mae": 0.06834540668119099,
+        "psnr_db": 20.217487424513028
+      },
+      {
+        "frame": 14,
+        "mae": 0.07067589566690874,
+        "psnr_db": 19.93090713934496
+      },
+      {
+        "frame": 15,
+        "mae": 0.0716766017106431,
+        "psnr_db": 19.78917511760666
+      },
+      {
+        "frame": 16,
+        "mae": 0.07747219196320504,
+        "psnr_db": 19.04905685847323
+      },
+      {
+        "frame": 17,
+        "mae": 0.08317861897845558,
+        "psnr_db": 18.535483653834504
+      },
+      {
+        "frame": 18,
+        "mae": 0.09189835996126845,
+        "psnr_db": 17.8472041614202
+      },
+      {
+        "frame": 19,
+        "mae": 0.0714219115629791,
+        "psnr_db": 19.943784971679715
+      },
+      {
+        "frame": 20,
+        "mae": 0.061319696602921,
+        "psnr_db": 21.35091946976207
+      },
+      {
+        "frame": 21,
+        "mae": 0.05577778786411684,
+        "psnr_db": 22.184794850422143
+      },
+      {
+        "frame": 22,
+        "mae": 0.04824001452432825,
+        "psnr_db": 23.3759832133831
+      },
+      {
+        "frame": 23,
+        "mae": 0.04860186193819092,
+        "psnr_db": 23.191002885803865
+      },
+      {
+        "frame": 24,
+        "mae": 0.04706316065520859,
+        "psnr_db": 23.224809002907612
+      },
+      {
+        "frame": 25,
+        "mae": 0.04227766682804809,
+        "psnr_db": 24.07710681539809
+      },
+      {
+        "frame": 26,
+        "mae": 0.038222736625514404,
+        "psnr_db": 24.826938925484768
+      },
+      {
+        "frame": 27,
+        "mae": 0.03512363834422658,
+        "psnr_db": 25.335669979985177
+      },
+      {
+        "frame": 28,
+        "mae": 0.034857560719761156,
+        "psnr_db": 25.436275112787147
+      },
+      {
+        "frame": 29,
+        "mae": 0.03390253570564028,
+        "psnr_db": 25.803870925718122
+      },
+      {
+        "frame": 30,
+        "mae": 0.03472268619381909,
+        "psnr_db": 25.508082497613586
+      },
+      {
+        "frame": 31,
+        "mae": 0.03594758129589284,
+        "psnr_db": 25.21365745396772
+      },
+      {
+        "frame": 32,
+        "mae": 0.03551498829984669,
+        "psnr_db": 25.250834049070285
+      },
+      {
+        "frame": 33,
+        "mae": 0.034873749293956265,
+        "psnr_db": 25.512985963895414
+      },
+      {
+        "frame": 34,
+        "mae": 0.03485201323327685,
+        "psnr_db": 25.570715870400846
+      },
+      {
+        "frame": 35,
+        "mae": 0.03529242314209634,
+        "psnr_db": 25.45004094526279
+      },
+      {
+        "frame": 36,
+        "mae": 0.043131314048253044,
+        "psnr_db": 23.796334697841026
+      },
+      {
+        "frame": 37,
+        "mae": 0.03697997861696119,
+        "psnr_db": 25.122978931069643
+      },
+      {
+        "frame": 38,
+        "mae": 0.03265965666101832,
+        "psnr_db": 26.192560669911927
+      },
+      {
+        "frame": 39,
+        "mae": 0.03189062373920762,
+        "psnr_db": 26.443075157281744
+      },
+      {
+        "frame": 40,
+        "mae": 0.03183949608650044,
+        "psnr_db": 26.437801814203667
+      },
+      {
+        "frame": 41,
+        "mae": 0.031614752279512624,
+        "psnr_db": 26.445867649297227
+      },
+      {
+        "frame": 42,
+        "mae": 0.034651688453159045,
+        "psnr_db": 25.644302393057412
+      },
+      {
+        "frame": 43,
+        "mae": 0.03305501089324619,
+        "psnr_db": 25.930526647981573
+      },
+      {
+        "frame": 44,
+        "mae": 0.03488853586702171,
+        "psnr_db": 25.59993113713046
+      },
+      {
+        "frame": 45,
+        "mae": 0.03604905995319939,
+        "psnr_db": 25.281391419813374
+      },
+      {
+        "frame": 46,
+        "mae": 0.04233308117485677,
+        "psnr_db": 23.744140352814874
+      },
+      {
+        "frame": 47,
+        "mae": 0.050012829823287336,
+        "psnr_db": 22.074093715441194
+      }
+    ],
+    "mean_mae": 0.05377835059778369,
+    "mean_psnr_db": 22.580619021422546,
+    "minimum_psnr_db": 17.8472041614202
+  },
+  "preview": {
+    "filename": "custom-cat-reconstruction-comparison.mp4",
+    "bytes": 2328767,
+    "sha256": "7f76761e4cb91c905298ce3148dd2e8e6ea866c455058dd07c7231d6aebc049c",
+    "mime_type": "video/mp4",
+    "width": 1440,
+    "height": 318,
+    "frames": 96,
+    "fps": 24,
+    "duration_seconds": 4,
+    "complete_decode_passed": true,
+    "timing": "Sample-and-hold using original PTS; no temporal interpolation or additional rendered timestamps.",
+    "selection_applied": false,
+    "transformation_applied": false
+  },
+  "billing": {
+    "checked_at": "2026-10-27T20:08:20.227565+00:00",
+    "metered_cost_usd": "2.97077414",
+    "billed_cost_usd": "0E-8",
+    "current_concurrent_tasks": 0,
+    "current_concurrent_gpus": 0,
+    "net_spend_limit_usd": 0,
+    "caveat": "Workspace cycle snapshot, subject to reconciliation; overlapping snapshots are not additive."
+  },
+  "job_cleanup": {
+    "tasks": {},
+    "app": [
+      {
+        "state": "APP_STATE_STOPPED",
+        "running_tasks": 0,
+        "stopped_at": 1793129947.896541
+      }
+    ]
+  },
+  "failed_attempt": "playback001 timed out during apt installation before model work; deliberate corrected attempt raised only apt substep to 180 seconds, retaining overall limits.",
+  "limits": [
+    "In-sample RGB fit is not held-out or geometric validation.",
+    "No custom-cat SAM inference or semantic selection.",
+    "No wide-view or full occlusion/re-entry validation.",
+    "No Phase 2 work."
+  ]
+}

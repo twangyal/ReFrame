@@ -132,3 +132,8 @@ to training inputs. Reloaded captures additionally bind the playback report to
 the original photo report and all three trained checkpoints. Changed timing,
 render bytes or model bytes are rejected before output creation. No SAM mask,
 semantic selection or object edit is implied by this preview.
+
+Final validation: the corrected render-only run reloaded all three trained models,
+preserved their hashes, and exported 96 native captures without further training.
+All captures and the encoded comparison passed closeout checks; see
+[playback evidence](evidence/custom-playback-2026-10-27.json).

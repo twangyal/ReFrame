@@ -16,7 +16,8 @@ recognizable; detail, boundaries and unseen geometry have limitations.
 [Custom reconstruction evidence](docs/CUSTOM_RESULTS.md).
 
 These are distinct experiments: no hosted SAM request or semantic Gaussian
-selection was run on the cat. Phase 1 is in final playback/export verification;
+selection was run on the cat. Phase 1 milestones 01–06 are complete with these
+qualified, separate results;
 no Phase 2 editor or transformation is claimed. [Phase 1 audit](docs/PHASE1.md).
 
 ## Setup and checks
@@ -35,14 +36,14 @@ No model inference or cloud run is triggered by these checks.
 - [Actual upstream interfaces and algorithm](docs/FEASIBILITY.md)
 - [Hosted SAM API and caching](docs/SAM_API.md)
 - [Published sample provenance and licenses](docs/PUBLISHED_SAMPLE.md)
-- [Phase 1 status and remaining custom-video work](docs/PHASE1.md)
+- [Phase 1 completion evidence and limitations](docs/PHASE1.md)
 
 ## Prototype
 
 Modules separate segmentation, reconstruction access, contribution aggregation,
 selection revisions, visualization and evaluation. Association uses the official
 renderer's visible alpha/transmittance weights, preserving extent, depth order,
-opacity and occluders. It does not equate2D masks with Gaussian IDs or train a new
+opacity and occluders. It does not equate 2D masks with Gaussian IDs or train a new
 feature field. Scores and checkpoint-bound membership live in separate sidecars.
 
 New local tools revise saved evidence without repeating inference, explicitly

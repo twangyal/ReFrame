@@ -48,8 +48,23 @@ in [CUSTOM_GPU.md](CUSTOM_GPU.md).
 
 The original upstream montage plays 48 frames at 10 fps (4.8 seconds). A separate
 comparison exporter preserves the four-second source timing by holding sampled
-frames, without inventing intermediate motion. Native-frame capture validation
-and final export are currently being closed out.
+frames, without inventing intermediate motion. A separate render-only run reloaded
+the saved models without training and produced
+96 native captures (48 source/nearby pairs). All pairs were visually inspected.
+The final 1440×318 H.264 comparison decodes completely: 96 frames at 24 fps,
+four seconds. Its original bytes and SHA-256 are recorded in the playback evidence.
+
+Source-view RGB fit is **in-sample**, not held-out validation: mean PSNR 22.58 dB,
+mean absolute RGB error 0.05378 on [0,1], minimum PSNR 17.85 dB at frame 18.
+That frame visibly loses face/fur detail and misrepresents the tail boundary.
+These measurements do not establish geometric accuracy. The nearby views were
+inspected separately and retain vegetation stretching and incomplete surfaces.
+
+The render-only run took 322.90 seconds including setup, with 25.14 seconds in
+the playback stage. No new GPU run was needed for final closeout. At 20:08 UTC,
+Modal reported approximately $2.97 gross workspace-cycle usage, $0 billed,
+zero active tasks/GPUs and a $0 net-spend limit. Billing remains subject to
+reconciliation; earlier snapshots must not be added to this total.
 
 ## Distinct experiments
 
@@ -61,7 +76,8 @@ has been performed.
 
 [Tracking](evidence/custom-tracking-2026-10-27.json),
 [camera](evidence/custom-camera-2026-10-27.json),
-[scaffold](evidence/custom-scaffold-2026-10-27.json), and
-[photo](evidence/custom-photo-2026-10-27.json) records bind measurements to exact
+[scaffold](evidence/custom-scaffold-2026-10-27.json),
+[photo](evidence/custom-photo-2026-10-27.json), and
+[checkpoint reload / final playback](evidence/custom-playback-2026-10-27.json) records bind measurements to exact
 inputs and checkpoints. Original footage, model weights, checkpoints and rendered
 assets remain separate from the published code repository.
