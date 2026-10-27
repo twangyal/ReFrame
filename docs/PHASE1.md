@@ -5,8 +5,9 @@ experiments: Balloon2 supplies hosted SAM-to-Gaussian selection, while the fresh
 CC0 cat clip supplies custom reconstruction. **Visual quality remains unresolved:**
 the cat reconstruction loses substantial detail even before preview encoding.
 The earlier completion statement described execution evidence too broadly.
-A single approved 4,000-step, same-resolution fitting comparison is in progress;
-no quality improvement is claimed yet. Phase 2 remains stopped.
+A single approved 4,000-step comparison improved mean PSNR by 1.26 dB and
+MAE by 13.6%, with modest visual improvement and substantial residual blur.
+See [quality results](CUSTOM_RESULTS.md). Phase 2 remains stopped.
 
 | Roadmap milestone | Evidence and status |
 | --- | --- |

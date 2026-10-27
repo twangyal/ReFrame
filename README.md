@@ -13,6 +13,8 @@ A fresh four-second CC0 cat clip has also been reconstructed from new depth and
 point-track priors, with 222,409 static and 37,135 dynamic Gaussians. All 48
 source/fixed/nearby-camera timestamps were inspected. Head/tail motion remains
 recognizable; detail, boundaries and unseen geometry have limitations.
+The controlled 4,000-step follow-up improves source fit by 1.26 dB and reduces
+RGB error by 13.6%, but blur and geometric artifacts remain.
 [Custom reconstruction evidence](docs/CUSTOM_RESULTS.md).
 
 These are distinct experiments: no hosted SAM request or semantic Gaussian

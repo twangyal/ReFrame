@@ -82,7 +82,7 @@ has been performed.
 inputs and checkpoints. Original footage, model weights, checkpoints and rendered
 assets remain separate from the published code repository.
 
-## Controlled quality follow-up (in progress)
+## Controlled quality follow-up — modest improvement
 
 Native PNGs already show the blur. Across 48 matched states, export-to-native
 RGB PSNR averages 35.16 dB (source camera) and 35.58 dB (nearby); native source
@@ -96,4 +96,37 @@ learning-rate/densification schedules. This reruns appearance fitting from the
 preserved scaffold, not an optimizer resume. Hard invocation cap25min, one
 A10040GB preferred/80GB fallback, no automatic retries or new model inference.
 The conservative whole-run estimate is4.2672USD within a4.30USD planning ceiling.
-No result or visual improvement is claimed until the run and comparison finish.
+The single run completed in **1,047.30 seconds (17m27s)** on A100 40GB,
+including setup and rendering; the photo stage took 682.23 seconds. It produced
+416,633 static and 49,162 dynamic Gaussians on the same 155-node scaffold.
+All original baseline/input hashes remain unchanged, and all 96 native captures
+were checked. No timeout, retry, extra model inference or enhancement occurred.
+
+| In-sample source metric, mean over 48 frames | 2,000 steps | 4,000 steps |
+| --- | ---: | ---: |
+| RGB PSNR | 22.5806 dB | 23.8408 dB |
+| RGB MAE on [0,1] | 0.053778 | 0.046472 |
+
+The proposed numerical targets passed: **+1.2602 dB PSNR and 13.586% less MAE**.
+PSNR improved on 47/48 frames; MAE improved on all 48. Frame 18 remains the worst
+fit and slightly regressed in PSNR (17.8472 to 17.8356 dB). These are training-view
+metrics, not held-out generalization or geometric accuracy.
+
+All 48 source/nearby pairs were visually inspected, with native-sized comparisons
+at 0, 18, 24 and 47. Ground detail and some facial structure improve, but fur,
+tail tips and incomplete surfaces remain soft or ragged. The nearby views show
+no obvious new gross motion collapse in sampled sequences, but residual artifacts
+remain and temporal flicker was not quantitatively measured. Their orbit recipe
+is matched; optimized camera matrices can differ, and there is no novel-view
+ground truth. **This is a modest improvement, not a resolution of visual quality.**
+
+Two four-second private previews fully decode at 24 fps/96 frames: the candidate
+source/nearby comparison and the baseline-versus-candidate comparison. Both retain
+sample-and-hold timing and unenhanced native renders. Video hashes, per-frame
+metrics and checkpoint provenance are in the [quality evidence](evidence/custom-quality-4000-2026-10-27.json).
+
+At 21:08 UTC the app was stopped with zero tasks/GPUs. Workspace-cycle usage was
+approximately $3.80 gross and $0 billed; the difference from the pre-run snapshot
+was about $0.83, subject to reconciliation. The $0 net-spend limit remained set.
+The authorized single experiment is finished. No further run or Phase 2 work
+has been started.

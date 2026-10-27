@@ -146,3 +146,7 @@ Quality mode requires an approval record with `quality_fit_4000_authorized: true
 rejects config changes beyond4000total steps, and includes the larger cost in
 the cumulative credit check. Its worker/child/invocation deadlines are1400/1450/1500s.
 This does not implement resumable optimization or authorize further experiments.
+
+The approved quality run completed on A100 40GB in 1047.30 seconds including
+setup/rendering. See [quality results](CUSTOM_RESULTS.md) for measured improvement,
+residual failures and billing. This single completed run does not authorize retries.
