@@ -102,3 +102,21 @@ class CustomStageTests(unittest.TestCase):
         result=renderer(only_viz_last_frame=False)[0]
         self.assertIs(result,frame)
         np.testing.assert_array_equal((result*255).astype(np.uint8),np.full((2,2,3),127,dtype=np.uint8))
+
+    def test_capture_retains_rgb_pixels_and_distinguishes_camera_views(self):
+        import numpy as np
+        from PIL import Image
+        frame=np.zeros((8,12,3),dtype=np.uint8)
+        frame[:4,4:8]=[12,34,56]
+        class Camera:
+            default_H=4
+            default_W=4
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            wrapped=custom_stages.capture_rgb_diagnostics(lambda *a,**k:frame,root)
+            self.assertIs(wrapped(3,None,Camera(),None),frame)
+            wrapped(3,None,Camera(),None,T_cw='nearby',prefix_text='Novel')
+            wrapped(3,None,Camera(),None,T_cw='fixed',prefix_text='Fix=0')
+            self.assertEqual(sorted(p.name for p in root.iterdir()),['000003_nearby.png','000003_source.png'])
+            with Image.open(root/'000003_source.png') as saved:
+                np.testing.assert_array_equal(np.asarray(saved),np.broadcast_to([12,34,56],(4,4,3)))

@@ -31,6 +31,11 @@ def main():
     from lib_mosca import dynamic_solver
     from scripts.custom_stages import uint8_curve_renderer
     dynamic_solver.viz_curve=uint8_curve_renderer(dynamic_solver.viz_curve)
+    if a.stage=='photo':
+        from lib_mosca import photo_recon_viz_utils
+        from scripts.custom_stages import capture_rgb_diagnostics
+        photo_recon_viz_utils.viz2d_one_frame=capture_rgb_diagnostics(
+            photo_recon_viz_utils.viz2d_one_frame,a.output/'rgb-diagnostics')
     from lib_prior.prior_loading import Saved2D
     from lib_moca.epi_helpers import analyze_track_epi,identify_tracks
     cfg=OmegaConf.create(json.loads(a.config.read_text()))

@@ -153,3 +153,18 @@ contract is preserved and covered by a second regression test. The active
 scaffold attempt was staged with the earlier wrapper; its final curve diagnostic
 video may be double-scaled and is excluded from visual evidence. This affects
 diagnostic colors only, not fitting or saved model parameters.
+
+## Scaffold result
+
+The corrected scaffold fit completed on an A100 40GB: 1,000 steps, 155 nodes
+over 48 timestamps, 75.96 seconds for the stage and 435.00 seconds including
+setup. All checkpoint tensors were finite and input hashes were unchanged.
+Sparse motion diagnostics were inspected at five timestamps; they do not show
+a dense reconstructed subject. See [scaffold evidence](evidence/custom-scaffold-2026-10-27.json).
+
+The 2,000-step photometric fit is pending. A tested visualization hook captures
+source-view and moving-nearby-view RGB panels at native resolution before
+upstream montage compression, with no extra render pass. This follows the
+inspected `viz2d_one_frame` layout and preserves its return value. The hook
+requires the expected layout and refuses to overwrite an existing capture.
+No custom SAM inference or selection is claimed.

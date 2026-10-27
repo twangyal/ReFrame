@@ -28,6 +28,32 @@ def uint8_curve_renderer(renderer):
     return render
 
 
+def capture_rgb_diagnostics(renderer,output):
+    """Save RGB panels before upstream montage/video compression, without rerendering.
+
+    Pinned viz2d_one_frame starts with [target, prediction, error] at native H/W.
+    Only original-camera and explicitly named moving-nearby-camera calls count.
+    """
+    from functools import wraps
+    import numpy as np
+    from PIL import Image
+    @wraps(renderer)
+    def render(model_tid,s2d,cams,*args,**kwargs):
+        frame=renderer(model_tid,s2d,cams,*args,**kwargs)
+        view='source' if kwargs.get('T_cw') is None and kwargs.get('view_cam_id') is None else None
+        if kwargs.get('prefix_text')=='Novel':view='nearby'
+        if view is not None:
+            h,w=int(cams.default_H),int(cams.default_W)
+            if frame.dtype!=np.uint8 or frame.ndim!=3 or frame.shape[2]!=3 or frame.shape[0]<h or frame.shape[1]!=3*w:
+                raise ValueError('unexpected upstream RGB diagnostic layout')
+            output.mkdir(parents=True,exist_ok=True)
+            path=output/f'{int(model_tid):06d}_{view}.png'
+            if path.exists():raise FileExistsError('refusing to overwrite captured diagnostic')
+            Image.fromarray(frame[:h,w:2*w]).save(path)
+        return frame
+    return render
+
+
 def required_inputs(stage):
     camera=('bundle/bundle_cams.pth','bundle/bundle.pth','tracker_epi.npz')
     if stage=='camera':return ()

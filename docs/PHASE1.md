@@ -92,3 +92,7 @@ upstream fallback, so calibration remains uncertain. Scaffold fitting found 243
 dynamic tracks but its first attempt stopped on a diagnostic image encoding
 error; a tested compatibility fix is being validated. Milestone 03 still needs
 trained Gaussians and inspected reconstructed playback.
+
+The corrected scaffold stage has now passed on an A100 40GB: 155 motion nodes
+over 48 timestamps after 1,000 optimization steps. Original inputs are preserved.
+Gaussian appearance fitting and playback review are still required for milestone 03.
