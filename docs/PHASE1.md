@@ -2,13 +2,13 @@
 
 Phase 1 is incomplete. Published-scene reconstruction access, official hosted SAM
 tracking, exact-frame alignment and persistent Gaussian association are
-demonstrated. Milestone 06 association cleanup/validation remains in progress;
+demonstrated. Milestone 06 now has qualified sample evidence from the cleanup validation;
 milestone 03 custom 3–5-second video reconstruction has not run. A working sample
 fallback is not a claim of completing that custom-video milestone.
 
 The raw sample selection has 8,227 dynamic + 2 static rows. A separately saved manual
-cleanup candidate excludes only the two flagged static outliers; it has not been
-rendered and inherits no IoU. Source/nearby view checks cover only three times;
+cleanup revision excludes only the two flagged static outliers and now has its own
+hash-bound render measurements. Source/nearby isolation checks cover all 12 discrete times;
 wide-view geometry, full occlusion/re-entry and continuous-time behavior remain
 unvalidated. No Phase 2 editor or transformation is claimed.
 
@@ -21,7 +21,7 @@ unvalidated. No Phase 2 editor or transformation is claimed.
 | 03 — Custom short-video reconstruction (TARGET): a continuous 3–5-second input reconstructs with usable dynamic motion | **Outstanding:** selected rights-cleared clip, preprocessing compatibility, weights and measured training budget; no custom checkpoint or playback. CPU input preparation is implemented. |
 | 04 — Meta SAM 3.1 segmentation (CORE): chosen object masked/tracked across the same source frames | **Demonstrated on sample:** one hosted request, cached masks, returned object ID 0 through all 12 exact source frames and inspected overlay. No custom-clip inference. |
 | 05 — Frame, time & camera alignment (CORE): agreement on order, timestamps, resolution and projection | **Demonstrated within sample index domain:** exact source pixels/order, mask dimensions, calibrated MoSca projection and reprojection comparisons. Synthetic MP4 timing is recorded; original acquisition cadence is unknown. No continuous-time interpolation claim. |
-| 06 — 2D mask to 4D Gaussian association (CORE): membership isolates a coherent object across time | **Qualified sample evidence; cleanup validation pending:** membership table and source/nearby isolated renders for 8,227 dynamic + 2 static rows. Explicitly revised 8,227-dynamic candidate has not been rendered; contamination and missing geometry remain under evaluation. |
+| 06 — 2D mask to 4D Gaussian association (CORE): membership isolates a coherent object across time | **Qualified sample exit criterion demonstrated:** checkpoint-bound 8,227-dynamic selection rendered and visually inspected at all 12 discrete timestamps in source/nearby views. Cleanup changes one false-positive pixel at frame11; ragged/missing geometry remains. See RESULTS.md and exact cleanup evidence; no generalization or geometric-correctness claim. |
 
 **Gate A (Oct 30):** the sample demonstrates that SAM selection can map to actual
 4D scene elements rather than only pixels. Evidence is limited to this scene and
@@ -73,4 +73,4 @@ model call or cloud job runs merely by invoking the CPU tests or preparation.
 The [preprocessing audit](PREPROCESSING.md) records official weight sources,
 observed revisions, model sizes and license uncertainties. No prior weights were
 downloaded or executed by that audit. Cleanup diagnostics now measure each
-excluded row’s absolute visible mass; those new measurements await GPU execution.
+excluded row’s absolute visible mass; the exact revision now has GPU measurements in the cleanup evidence.
