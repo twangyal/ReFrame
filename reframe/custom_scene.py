@@ -16,10 +16,12 @@ def prepare_custom_scene(video,out,*,max_frames=48,max_side=480):
     if type(max_frames) is not int or not 2<=max_frames<=120 or type(max_side) is not int or not 32<=max_side<=1024:
         raise ValueError('require 2..120 selected frames and 32..1024 maximum image side')
     info=json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0',
-        '-show_entries','stream=width,height,nb_frames,avg_frame_rate:format=duration','-of','json',str(video)],text=True))
-    duration=float(info['format']['duration'])
+        '-show_entries','stream=width,height,nb_frames,avg_frame_rate,duration','-of','json',str(video)],text=True))
+    stream=info['streams'][0]
+    if stream.get('duration') in (None,'N/A'):raise ValueError('video stream duration is unavailable; provide a timed MP4')
+    duration=float(stream['duration'])
     if not np.isfinite(duration) or not 3<=duration<=5:raise ValueError('supply a preselected 3–5 second clip; no silent trim')
-    stream=info['streams'][0];parts=stream['avg_frame_rate'].split('/')
+    parts=stream['avg_frame_rate'].split('/')
     rate=float(parts[0])/float(parts[1]) if float(parts[1]) else 0
     estimated_frames=max(float(stream.get('nb_frames','0')) if stream.get('nb_frames','').isdigit() else 0,rate*duration)
     if not 0<estimated_frames<=600 or stream['width']*stream['height']*estimated_frames*3>4*1024**3:

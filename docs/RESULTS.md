@@ -88,7 +88,7 @@ The original source footage, weights, decoded masks, renders and private videos
 are not included because asset redistribution rights remain unestablished.
 Local recipes reference these inputs; a fresh clone does not contain them.
 
-CPU verification for this snapshot: 57 discovered, 56 passed, one explicit CUDA
+CPU verification for this snapshot: 58 discovered, 57 passed, one explicit CUDA
 skip. Earlier independent native CUDA tests passed remotely. The baseline
 completed in 215.067s, refined association in 210.475s. Render-phase memory was
 1.184GiB allocated /1.375GiB reserved after resetting counters following load;

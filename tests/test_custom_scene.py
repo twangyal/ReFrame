@@ -7,6 +7,15 @@ from reframe.media import sha256_file
 
 
 class CustomSceneTests(unittest.TestCase):
+    def test_audio_duration_cannot_disguise_short_video(self):
+        from reframe.custom_scene import prepare_custom_scene
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);video=root/'short-video-long-audio.mp4'
+            subprocess.run(['ffmpeg','-nostdin','-v','error','-f','lavfi','-i','color=blue:size=32x24:rate=4:duration=1',
+                            '-f','lavfi','-i','anullsrc=r=8000:cl=mono:d=4','-c:v','libx264','-c:a','aac',str(video)],check=True)
+            with self.assertRaises(ValueError):prepare_custom_scene(video,root/'scene')
+            self.assertFalse((root/'scene').exists())
+
     def test_prepare_keeps_capture_indices_and_preserves_source(self):
         from reframe.custom_scene import prepare_custom_scene
         with tempfile.TemporaryDirectory() as d:
