@@ -27,6 +27,15 @@ click-through was encountered. These findings are not legal clearance for public
 commercial use; they also do not assert that every ambiguity forbids private
 research. Source footage and generated-output redistribution remain separate.
 
+
+A further official-source check found the Metric3D repository owner's response
+in [issue170](https://github.com/YvanYin/Metric3D/issues/170#issuecomment-2396021445):
+“If you want to use it commercially, please email me.” This reinforces that a
+blanket commercially permissive weight claim is unsupported. It does not supply
+a separate weight grant or establish that this private feasibility experiment is
+forbidden. No author was contacted and no agreement was accepted. Public hackathon
+publication rights and private experimental use must be assessed separately.
+
 ## Default preprocessing is substantially heavier than checkpoint rendering
 
 Pinned MoSca `profile/demo/demo_prep.yaml` selects DepthCrafter, SpaTracker and

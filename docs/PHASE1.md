@@ -18,7 +18,7 @@ unvalidated. No Phase 2 editor or transformation is claimed.
 | --- | --- |
 | 01 — Environment & GPU setup (CORE): MoSca dependencies install; GPU inference succeeds locally or remotely | **Demonstrated for reconstruction playback:** pinned environment/package inventories, native CUDA reference test and A100 render. Full preprocessing/training dependencies remain unvalidated. |
 | 02 — Known-good MoSca playback (CORE): provided dynamic reconstruction renders at multiple timestamps and viewpoints | **Demonstrated:** preserved Balloon2 checkpoint, camera parameters, renderer and inspected source/nearby views at frames 0/6/11. |
-| 03 — Custom short-video reconstruction (TARGET): a continuous 3–5-second input reconstructs with usable dynamic motion | **Outstanding:** selected rights-cleared clip, preprocessing compatibility, weights and measured training budget; no custom checkpoint or playback. CPU input preparation is implemented. |
+| 03 — Custom short-video reconstruction (TARGET): a continuous 3–5-second input reconstructs with usable dynamic motion | **Outstanding:** a CC0 four-second clip is selected and 48 images prepared (CUSTOM_CLIP.md); preprocessing compatibility, weights and measured training budget remain; no custom checkpoint or playback. CPU input preparation is implemented. |
 | 04 — Meta SAM 3.1 segmentation (CORE): chosen object masked/tracked across the same source frames | **Demonstrated on sample:** one hosted request, cached masks, returned object ID 0 through all 12 exact source frames and inspected overlay. No custom-clip inference. |
 | 05 — Frame, time & camera alignment (CORE): agreement on order, timestamps, resolution and projection | **Demonstrated within sample index domain:** exact source pixels/order, mask dimensions, calibrated MoSca projection and reprojection comparisons. Synthetic MP4 timing is recorded; original acquisition cadence is unknown. No continuous-time interpolation claim. |
 | 06 — 2D mask to 4D Gaussian association (CORE): membership isolates a coherent object across time | **Qualified sample exit criterion demonstrated:** checkpoint-bound 8,227-dynamic selection rendered and visually inspected at all 12 discrete timestamps in source/nearby views. Cleanup changes one false-positive pixel at frame11; ragged/missing geometry remains. See RESULTS.md and exact cleanup evidence; no generalization or geometric-correctness claim. |
@@ -32,7 +32,8 @@ milestone 03 or all of Phase 1.
 
 ## Custom clip prerequisites
 
-Choose a rights-cleared 3–5-second MP4 with one clearly identifiable object,
+A CC0 four-second online clip is now prepared; see [source and inspection](CUSTOM_CLIP.md).
+For additional input, choose a rights-cleared 3–5-second MP4 with one clearly identifiable object,
 reasonable lighting, textured background, no cuts and modest motion. Prepare it:
 
 ```bash
