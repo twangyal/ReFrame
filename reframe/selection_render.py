@@ -31,6 +31,9 @@ def render_selection(scene,selection,masks,reliable,out,*,times=None):
     from .reconstruction import nearby_camera
     validate_scene_binding(selection,scene.provenance())
     selected=selection['selected'];meta=selection['metadata']
+    excluded=np.zeros_like(selected)
+    for row in meta.get('exclusions',[]):
+        excluded[row['index']+(scene.static_count if row['pool']=='dynamic' else 0)]=True
     if not selected.any():raise ValueError('selection contains no rows to render')
     masks=np.asarray(masks);reliable=np.asarray(reliable)
     if (masks.dtype!=bool or masks.shape!=(scene.frame_count,scene.height,scene.width)
@@ -65,7 +68,16 @@ def render_selection(scene,selection,masks,reliable,out,*,times=None):
                      'aggregation_role':'training' if t in meta['train_frames'] else 'excluded_from_aggregation'}
                 if reliable[t]:
                     row.update(mask_metrics(visible>=.5,masks[t]))
-                    row['visible_mass']=selected_mass_metrics(scene.evidence(t,masks[t]),selected,scene.static_count)
+                    evidence=scene.evidence(t,masks[t])
+                    row['visible_mass']=selected_mass_metrics(evidence,selected,scene.static_count)
+                    row['excluded_visible_mass']=selected_mass_metrics(evidence,excluded,scene.static_count)
+                    row['excluded_rows']=[]
+                    for exclusion in meta.get('exclusions',[]):
+                        index=exclusion['index']+(scene.static_count if exclusion['pool']=='dynamic' else 0)
+                        inside,outside,total=map(float,evidence[index])
+                        row['excluded_rows'].append({'pool':exclusion['pool'],'index':exclusion['index'],
+                                                     'inside':inside,'outside':outside,'total':total,
+                                                     'outside_fraction':outside/total if total>0 else None})
                     diff=np.stack([visible>=.5,masks[t],np.logical_xor(visible>=.5,masks[t])],axis=-1)
                     Image.fromarray(diff.astype(np.uint8)*255).save(out/f'{t:06d}_mask_comparison.png')
                 report['evaluation'].append(row)

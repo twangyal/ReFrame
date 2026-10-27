@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "observed_date": "2026-10-27",
+  "execution_ready": false,
+  "mosca_revision": "02404d2841b4e0dc2d9074860950bce5da579656",
+  "hash_kind": "upstream advertised LFS SHA256; no weight contents downloaded",
+  "code_revisions_observed": {
+    "DepthCrafter": "e5186120a71ecb56b69f9e89654198b4eadfaf60",
+    "Metric3D": "eb5b6fac0dc155e4e52f576e304fbf11655ff339",
+    "UniDepth": "8d8cfe4c7ee15297099983607febf0d4f32eb3d6",
+    "RAFT": "2888e15a51fa41140771d3f498ed8023cff098d1",
+    "SpaTracker": "191a3ddf447b87ce61975c6ff0e10653e19f590d"
+  },
+  "weights": [
+    {
+      "component": "depthcrafter",
+      "repository": "tencent/DepthCrafter",
+      "revision": "f2207fa67e799d3cac41b0a051bb051401137a5b",
+      "file": "diffusion_pytorch_model.safetensors",
+      "bytes": 3049435868,
+      "upstream_lfs_sha256": "48feba12ce91f2ba2e7d3853bfcdd50ad45a4980be227f43f5add28baa451f94",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": false,
+      "local_sha256_verified": false,
+      "runtime_validated": false,
+      "license_status": "academic/research/education; commercial/production excluded"
+    },
+    {
+      "component": "svd",
+      "repository": "stabilityai/stable-video-diffusion-img2vid-xt",
+      "revision": "9e43909513c6714f1bc78bcb44d96e733cd242aa",
+      "file": "image_encoder/model.fp16.safetensors",
+      "bytes": 1264217240,
+      "upstream_lfs_sha256": "ae616c24393dd1854372b0639e5541666f7521cbe219669255e865cb7f89466a",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": false,
+      "local_sha256_verified": false,
+      "runtime_validated": false,
+      "license_status": "separate Stability Community agreement; not accepted by this audit"
+    },
+    {
+      "component": "svd",
+      "repository": "stabilityai/stable-video-diffusion-img2vid-xt",
+      "revision": "9e43909513c6714f1bc78bcb44d96e733cd242aa",
+      "file": "vae/diffusion_pytorch_model.fp16.safetensors",
+      "bytes": 195531910,
+      "upstream_lfs_sha256": "af602cd0eb4ad6086ec94fbf1438dfb1be5ec9ac03fd0215640854e90d6463a3",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": false,
+      "local_sha256_verified": false,
+      "runtime_validated": false,
+      "license_status": "separate Stability Community agreement; not accepted by this audit"
+    },
+    {
+      "component": "metric3d",
+      "repository": "JUGGHM/Metric3D",
+      "revision": "80d2d1410afb4b23cd9d18c6be9144483d4b70b6",
+      "file": "metric_depth_vit_giant2_800k.pth",
+      "bytes": 5510989187,
+      "upstream_lfs_sha256": "22d64c4dec098fa56eb17b6f22b1fb7d16b4742c66a9c8ee73e7dae61c0d2a1b",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": false,
+      "local_sha256_verified": false,
+      "runtime_validated": false,
+      "license_status": "code BSD2; explicit weight grant unverified"
+    },
+    {
+      "component": "metric3d",
+      "repository": "JUGGHM/Metric3D",
+      "revision": "80d2d1410afb4b23cd9d18c6be9144483d4b70b6",
+      "file": "metric_depth_vit_small_800k.pth",
+      "bytes": 150120967,
+      "upstream_lfs_sha256": "b34b2a2be9148054991cef7e417930e1320602ba7bc503b0ee4e7888543728f6",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": false,
+      "local_sha256_verified": false,
+      "runtime_validated": false,
+      "license_status": "code BSD2; explicit weight grant unverified"
+    },
+    {
+      "component": "unidepth",
+      "repository": "lpiccinelli/unidepth-v2-vitl14",
+      "revision": "52b349b514bd8b47642f67ac78cb7b5dc5c51dd9",
+      "file": "pytorch_model.bin",
+      "bytes": 1415494210,
+      "upstream_lfs_sha256": "101d4a941854e7f7ec6839a5a39bfe35bd5cc59ed65d8c5994a55607d8481541",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": false,
+      "local_sha256_verified": false,
+      "runtime_validated": false,
+      "license_status": "code CC BY-NC4; model-specific coverage not independently explicit"
+    },
+    {
+      "component": "bootstapir",
+      "repository": "google/tapnet",
+      "revision": "5d3fb48e76c5422841e38501514121e251beabb7",
+      "file": "bootstapir_checkpoint_v2.pt",
+      "bytes": 218886140,
+      "upstream_lfs_sha256": "8493c7a69e02c85b9382fbb3c7b8b539b36bc08ede744b9e99feb739a0129f4b",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": false,
+      "local_sha256_verified": false,
+      "runtime_validated": false,
+      "license_status": "Official code and weight Apache2.0; MoSca visualizer separate"
+    }
+  ],
+  "unresolved_asset_integrity": [
+    "RAFT weights/raft_models/raft-things.pth",
+    "SpaTracker weights/spaT_final.pth"
+  ],
+  "default_identified_depth_weight_bytes": 10020174205,
+  "compatible_dependency_lock_validated": false
+}
