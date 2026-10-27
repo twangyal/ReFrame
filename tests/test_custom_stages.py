@@ -86,11 +86,19 @@ class CustomStageTests(unittest.TestCase):
             path=Path(d)/'diagnostic.png'
             with self.assertRaises(TypeError):Image.fromarray(frame).save(path)
             render=custom_stages.uint8_curve_renderer(lambda *args,**kwargs:[frame])
-            result=render('camera',text='step')[0]
+            result=render('camera',text='step',only_viz_last_frame=True)[0]
             Image.fromarray(result).save(path)
             with Image.open(path) as saved:
                 np.testing.assert_array_equal(np.asarray(saved),[[[0,127,255],[0,255,63]]])
             np.testing.assert_array_equal(frame,original)
             self.assertEqual(result.dtype,np.uint8)
-            bad=custom_stages.uint8_curve_renderer(lambda:[np.full((2,2,3),np.nan)])
-            with self.assertRaisesRegex(ValueError,'finite'):bad()
+            bad=custom_stages.uint8_curve_renderer(lambda **kwargs:[np.full((2,2,3),np.nan)])
+            with self.assertRaisesRegex(ValueError,'finite'):bad(only_viz_last_frame=True)
+
+    def test_curve_video_retains_float_contract_for_upstream_scaling(self):
+        import numpy as np
+        frame=np.full((2,2,3),.5,dtype=np.float32)
+        renderer=custom_stages.uint8_curve_renderer(lambda **kwargs:[frame])
+        result=renderer(only_viz_last_frame=False)[0]
+        self.assertIs(result,frame)
+        np.testing.assert_array_equal((result*255).astype(np.uint8),np.full((2,2,3),127,dtype=np.uint8))

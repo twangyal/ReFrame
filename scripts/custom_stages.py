@@ -5,15 +5,18 @@ from pathlib import Path
 def uint8_curve_renderer(renderer):
     """Convert only MoSca curve diagnostics from normalized RGB for image writers.
 
-    Matches viz_helper.viz_scene's own save conversion; model tensors and the
-    original visualization function/module remain unchanged.
+    Matches viz_helper.viz_scene's own save conversion for the still-image call.
+    The full-sequence caller already scales floats to bytes, so retain its
+    original contract. Model tensors and upstream files remain unchanged.
     """
     from functools import wraps
     import numpy as np
     @wraps(renderer)
     def render(*args,**kwargs):
+        frames=renderer(*args,**kwargs)
+        if not kwargs.get('only_viz_last_frame',False):return frames
         result=[]
-        for frame in renderer(*args,**kwargs):
+        for frame in frames:
             frame=np.asarray(frame)
             if frame.ndim!=3 or frame.shape[-1]!=3 or not np.isfinite(frame).all():
                 raise ValueError('curve diagnostic must be finite RGB')

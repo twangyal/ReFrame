@@ -141,9 +141,15 @@ are motion tracks, not SAM masks or selected Gaussians. See the hash-bound
 
 The first scaffold attempt stopped at iteration zero while writing a diagnostic
 image: `viz_curve` returns normalized float RGB, which Pillow cannot save as RGB.
-A scoped wrapper on `dynamic_solver.viz_curve` now applies the same clipped
+For still-image calls only, a scoped wrapper on `dynamic_solver.viz_curve` applies the same clipped
 8-bit conversion already used by `viz_scene` when saving images. It does not
 change model tensors, upstream source files, or the shared image-writing module.
 The regression test reproduces the writer failure and verifies saved pixels,
 input preservation and rejection of nonfinite diagnostic values. GPU validation
 of the corrected scaffold remains pending.
+
+The full-sequence caller already multiplies float RGB by 255. Its float return
+contract is preserved and covered by a second regression test. The active
+scaffold attempt was staged with the earlier wrapper; its final curve diagnostic
+video may be double-scaled and is excluded from visual evidence. This affects
+diagnostic colors only, not fitting or saved model parameters.
