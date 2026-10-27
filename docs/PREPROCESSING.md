@@ -1,11 +1,13 @@
 # Preprocessing sources and unresolved runtime checks
 
-Official public documents and model metadata were checked on 2026-10-27. No
-weights were downloaded, models executed, credentials configured, or explicit
-agreements accepted. This is a source/access audit, not training-environment
-validation. Machine-readable observed revisions, file sizes and upstream LFS
-SHA256s are in `configs/preprocessing-sources.json`. Those hashes are advertised
-upstream identities, not local checksums of downloaded weights.
+Official public documents and model metadata were checked on 2026-10-27. The
+initial source audit downloaded no weights and executed no models. A subsequent
+[CPU compatibility experiment](PREPROCESSING_CPU.md) verified an Apache-licensed
+Depth Anything V2 Metric Small checkpoint, produced 48 custom-clip depth maps and
+loaded them through MoSca. No credentials or explicit agreements were created.
+Neither stage establishes CUDA training compatibility. Machine-readable observed revisions, file sizes and upstream LFS
+SHA256s are in `configs/preprocessing-sources.json`. Each weight entry distinguishes advertised upstream identity from an actually
+verified local checksum. Only the explicitly tested alternative is marked loaded.
 
 ## License and access findings
 
@@ -22,7 +24,7 @@ upstream identities, not local checksums of downloaded weights.
 
 HF metadata reports DepthCrafter, SVD XT, Metric3D, UniDepth v2 and TAPNet public
 and ungated. That establishes metadata access only; actual binary/CDN access,
-local checksum validation and execution are untested. No credential grant or
+local checksum validation and execution for those initial candidates are untested. No credential grant or
 click-through was encountered. These findings are not legal clearance for public
 commercial use; they also do not assert that every ambiguity forbids private
 research. Source footage and generated-output redistribution remain separate.

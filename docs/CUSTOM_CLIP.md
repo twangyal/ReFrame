@@ -44,7 +44,9 @@ depth/tracking and geometry; preparation is not evidence that reconstruction wor
 
 ## Remaining reconstruction gates
 
-No priors, cameras, trained checkpoint or custom playback exist yet. No new SAM
+The CPU follow-up now provides 48 depth priors; see [compatibility evidence](PREPROCESSING_CPU.md).
+No point tracks, calibrated cameras, trained Gaussian checkpoint or custom playback
+exist yet. No new SAM
 request was made. Existing sample masks must never be applied to this different
 clip. The hosted SAM one-call allowance remains consumed.
 
@@ -56,7 +58,8 @@ coverage. The smallest source-supported candidate is Metric3D-small plus
 BootsTAPIR. Metric3D's explicit weight-license coverage is still unverified (the repository
 owner asks commercial users to contact them; see the preprocessing audit);
 BootsTAPIR weights are Apache 2.0 but its vendored visualization has separate terms.
-No model weights were downloaded and no new model agreement accepted.
+No Metric3D weights were downloaded. The official Apache-licensed Depth Anything
+V2 Metric Small alternative was downloaded, hash-verified and tested on CPU.
 
 Additional source inspection found that flow can be skipped by the existing
 non-RAFT constructor branch together with `compute_flow=False`; preprocessing

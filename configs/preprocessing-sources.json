@@ -3,13 +3,14 @@
   "observed_date": "2026-10-27",
   "execution_ready": false,
   "mosca_revision": "02404d2841b4e0dc2d9074860950bce5da579656",
-  "hash_kind": "upstream advertised LFS SHA256; no weight contents downloaded",
+  "hash_kind": "Upstream advertised LFS SHA256; local verification status recorded per entry",
   "code_revisions_observed": {
     "DepthCrafter": "e5186120a71ecb56b69f9e89654198b4eadfaf60",
     "Metric3D": "eb5b6fac0dc155e4e52f576e304fbf11655ff339",
     "UniDepth": "8d8cfe4c7ee15297099983607febf0d4f32eb3d6",
     "RAFT": "2888e15a51fa41140771d3f498ed8023cff098d1",
-    "SpaTracker": "191a3ddf447b87ce61975c6ff0e10653e19f590d"
+    "SpaTracker": "191a3ddf447b87ce61975c6ff0e10653e19f590d",
+    "DepthAnythingV2": "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf"
   },
   "weights": [
     {
@@ -109,6 +110,22 @@
       "local_sha256_verified": false,
       "runtime_validated": false,
       "license_status": "Official code and weight Apache2.0; MoSca visualizer separate"
+    },
+    {
+      "component": "depth_anything_v2_metric_small",
+      "repository": "depth-anything/Depth-Anything-V2-Metric-VKITTI-Small",
+      "revision": "c725b8589bdf6ab04072cab74c0467830db80d6d",
+      "file": "depth_anything_v2_metric_vkitti_vits.pth",
+      "bytes": 99221808,
+      "upstream_lfs_sha256": "9203e538d35255c90dda4b7fedb47ff33fe725497bcca3b1e53b3a65ee63f0cb",
+      "metadata_public": true,
+      "metadata_gated": false,
+      "binary_downloaded": true,
+      "local_sha256_verified": true,
+      "runtime_validated": true,
+      "runtime_validation_scope": "CPU inference and exact MoSca Saved2D depth loading only; no tracking/training",
+      "license_status": "Official model card Apache2.0; upstream code Apache2.0",
+      "license_evidence_url": "https://huggingface.co/depth-anything/Depth-Anything-V2-Metric-VKITTI-Small/blob/c725b8589bdf6ab04072cab74c0467830db80d6d/README.md"
     }
   ],
   "unresolved_asset_integrity": [
