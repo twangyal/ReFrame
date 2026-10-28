@@ -15,6 +15,8 @@ source/fixed/nearby-camera timestamps were inspected. Head/tail motion remains
 recognizable; detail, boundaries and unseen geometry have limitations.
 The controlled 4,000-step follow-up improves source fit by 1.26 dB and reduces
 RGB error by 13.6%, but blur and geometric artifacts remain.
+Holding scaffold trajectories fixed in a subsequent fit reduced node drift,
+without a clear overall visual improvement.
 [Custom reconstruction evidence](docs/CUSTOM_RESULTS.md).
 
 These are distinct experiments: no hosted SAM request or semantic Gaussian

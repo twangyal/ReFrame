@@ -130,3 +130,60 @@ approximately $3.80 gross and $0 billed; the difference from the pre-run snapsho
 was about $0.83, subject to reconciliation. The $0 net-spend limit remained set.
 The authorized single experiment is finished. No further run or Phase 2 work
 has been started.
+
+## Fixed scaffold position follow-up — no clear quality gain
+
+One separately approved experiment held the **existing time-varying scaffold
+trajectories unchanged during fitting**; it did not stop the cat's animation.
+Only `photo_lr_np` and `photo_lr_np_final` changed to zero relative to the
+4,000-step profile. The same initial scaffold, source frames, depth maps, tracks,
+seed and other configuration were used. Gaussian parameters, node rotations and
+camera poses still optimized. Both previous fits remain preserved.
+
+The single attempt completed all 4,000 steps in **969.99 seconds (16m10s)**,
+including setup/rendering, under the 25-minute cap. The photo stage took 640.89 s.
+Modal allocated the authorized A100 80GB fallback after the ordered 40GB preference.
+The saved-state invariant verifies exact equality of all 155 node positions at
+all 48 timestamps, plus unchanged timestamp IDs and certainty masks. Finite
+checkpoints contain 417,183 static and 51,005 dynamic Gaussians; 96 native renders
+cover every source and nearby-view timestamp. No retry or new model inference ran.
+
+| In-sample source metric, mean over 48 frames | Free positions, 4,000 steps | Fixed positions, 4,000 steps |
+| --- | ---: | ---: |
+| RGB PSNR | 23.8408 dB | 23.9114 dB |
+| RGB MAE on [0,1] | 0.046472 | 0.046376 |
+| Source-relative temporal-difference error | 0.063287 | 0.062996 |
+
+This is only **+0.0705 dB PSNR and 0.206% less MAE**. PSNR improves on 28/48 frames
+and MAE on 25/48. Frame 18 remains worst and slightly regresses: 17.8356 → 17.7966 dB.
+Temporal-difference error decreases 0.459%; it compares changes in reconstruction
+error between adjacent frames, without motion compensation. It includes camera
+motion and fitting error and does not establish a perceptual flicker improvement.
+
+All 48 source/nearby pairs were inspected, with native detail checks at 18, 24 and 47
+and a decoded comparison-video frame. Fur and faces remain soft; tail-tip
+silhouettes differ and distortions persist in both views. No clear overall visual
+improvement or new gross animation collapse was demonstrated. Nearby-camera
+matrices can differ despite the same orbit recipe; there is no novel-view ground
+truth. Prior 4,000-step training used A100 40GB, while this fit used 80GB. With one run per
+setting and no uncertainty estimate, tiny metric gains should not be treated as
+statistically established improvements. The previous 4,000-step fit remains the reference.
+
+The node diagnostic improves largely by construction: median residual falls from
+3.226 to 0.293 pixels over 5,041 visible/certain node observations; head residual at
+frame 18 falls from 7.34 to 2.46 pixels. Yet image quality barely changes. **Eliminating
+scaffold-position drift alone is insufficient in this configuration.** Camera/depth
+consistency, rotation/skinning/Gaussian fitting, low input resolution and source
+softness remain plausible contributors. This experiment does not isolate them.
+
+The private four-second before/after video contains source, free/fixed source-view
+renders and free/fixed nearby views, with 96 frames at 24 fps. Native images are held
+at original source timing without blending, enhancement or invented intermediate
+states. Full decoding passed. The [evidence record](evidence/custom-fixed-positions-2026-10-28.json)
+binds metrics, preview hashes and visual review to the saved checkpoints.
+
+At 03:31 UTC the app was stopped, with zero active tasks/GPUs and the $0 net-spend
+limit retained. Workspace usage was approximately **$4.37 cumulative and $0 billed**;
+the change from the fresh pre-run snapshot was about **$0.70**, subject to billing
+reconciliation, not an exact job invoice. No Volumes, extra inference, OPAL or
+Phase 2 work was used. No execution blocker remains; visual quality is unresolved.

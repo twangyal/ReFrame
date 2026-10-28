@@ -7,6 +7,8 @@ the cat reconstruction loses substantial detail even before preview encoding.
 The earlier completion statement described execution evidence too broadly.
 A single approved 4,000-step comparison improved mean PSNR by 1.26 dB and
 MAE by 13.6%, with modest visual improvement and substantial residual blur.
+A subsequent fixed-scaffold-position experiment reduced node drift but produced
+no clear visual gain (+0.07 dB mean PSNR); blur remains unresolved.
 See [quality results](CUSTOM_RESULTS.md). Phase 2 remains stopped.
 
 | Roadmap milestone | Evidence and status |
