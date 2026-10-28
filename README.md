@@ -22,8 +22,10 @@ without a clear overall visual improvement.
 These are distinct experiments: no hosted SAM request or semantic Gaussian
 selection was run on the cat. Phase 1 pipeline evidence exists across these experiments, but custom
 reconstruction quality remains unresolved;
-Phase 2 recolor/translation and verified video export are implemented and CPU-tested;
-real edited rendering and Gate B are pending. [Phase 2 status and GPU plan](docs/PHASE2.md). [Phase 1 audit](docs/PHASE1.md).
+Phase 2 produced real highlight/recolor videos and a diagnostic translation.
+Gate B is demonstrated via the recolor/highlight fallback; translation exposes
+large residual artifacts, so full clean-move success is not claimed.
+[Phase 2 results](docs/PHASE2.md). [Phase 1 audit](docs/PHASE1.md).
 
 ## Setup and checks
 

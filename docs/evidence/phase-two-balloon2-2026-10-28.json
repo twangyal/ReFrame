@@ -1,0 +1,608 @@
+{
+  "experiment": "Balloon2 Phase 2 one-shot edit validation",
+  "date": "2026-10-28",
+  "implementation_commit": "13e6964fa26b7cf7658ce2901496d3dd91f3c787",
+  "runtime": {
+    "elapsed_seconds": 226.19695297599998,
+    "exit_code": 0,
+    "artifact_transfer": "complete",
+    "native_pngs": 120,
+    "original_hashes_preserved": true,
+    "gpu_guard": "Passed A100 40GB/80GB, CUDA 11.8, compute capability 8.0; exact allocated VRAM was not returned by this worker",
+    "independent_cuda_compositing_test": "1 test passed in worker stderr",
+    "function_cap_seconds": 900,
+    "startup_cap_seconds": 120,
+    "attempts": 1,
+    "automatic_retries": false,
+    "persistent_volumes": false,
+    "new_model_calls": false
+  },
+  "binding": {
+    "object_id": "166dfad9-bd7b-5a98-ae91-b0ed44de8807",
+    "selection_sha256": "c757ac57b6fd1d73f1bc5f26e4644aec1e08bd1916ffc98551bc99a84c818c19",
+    "checkpoint_sha256": {
+      "camera": "947fabaa98ab899abae4394727495970da79bd0ea18d04a56aac8c0a119cb1d3",
+      "static": "d3408dc816f5cf6f3c84cd7620a8e5a9dae7608442336893d042ac5740f3f9d3",
+      "dynamic": "897a3af669f42755256714a5e405b9c132dc646e7f0493e37f114ac97ffae2ae"
+    },
+    "mosca_revision": "02404d2841b4e0dc2d9074860950bce5da579656",
+    "backend": "native_add3",
+    "selected_static_count": 0,
+    "selected_dynamic_count": 8227,
+    "recipe": {
+      "schema": 1,
+      "object_id": "166dfad9-bd7b-5a98-ae91-b0ed44de8807",
+      "selection_sha256": "c757ac57b6fd1d73f1bc5f26e4644aec1e08bd1916ffc98551bc99a84c818c19",
+      "color_rgb": [
+        0.95,
+        0.2,
+        0.08
+      ],
+      "translation_extent_fraction": 0.3
+    }
+  },
+  "transform": {
+    "translation_world": [
+      0.16714029014110565,
+      -0.00031522265635430813,
+      -0.0019087305990979075
+    ],
+    "translation_units": "reconstruction units, not calibrated meters",
+    "selected_extent_05_95": 0.5571715831756592,
+    "maximum_translation_residual": 4.854518920183182e-08
+  },
+  "evaluation": [
+    {
+      "frame": 0,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "excluded_from_aggregation",
+      "iou": 0.8800721370604148,
+      "intersection": 3904,
+      "union": 4436,
+      "false_positive_pixels": 201,
+      "false_negative_pixels": 331,
+      "false_positive_fraction": 0.048964677222898906,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 3662.425456276879,
+          "outside": 241.80754940863028,
+          "total": 3904.233012732701,
+          "outside_fraction": 0.061934712559428215
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1670.4761528128624,
+        "outside_sam_absolute": 115.3925489818688,
+        "outside_sam_fraction": 0.06907763920338696,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 1,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.9315294117647058,
+      "intersection": 3959,
+      "union": 4250,
+      "false_positive_pixels": 16,
+      "false_negative_pixels": 275,
+      "false_positive_fraction": 0.004025157232704402,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 3725.9375186500056,
+          "outside": 52.082384102167055,
+          "total": 3778.019905997967,
+          "outside_fraction": 0.013785629879684144
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1600.810294896352,
+        "outside_sam_absolute": 21.73392931952776,
+        "outside_sam_fraction": 0.01357683005214242,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 2,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.9465215333648841,
+      "intersection": 4000,
+      "union": 4226,
+      "false_positive_pixels": 10,
+      "false_negative_pixels": 216,
+      "false_positive_fraction": 0.0024937655860349127,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 3774.888332771158,
+          "outside": 51.89251143017037,
+          "total": 3826.7808438082934,
+          "outside_fraction": 0.013560356223203144
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1625.4465588729054,
+        "outside_sam_absolute": 21.173474988170796,
+        "outside_sam_fraction": 0.01302625107702871,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 3,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.9566720442498271,
+      "intersection": 4151,
+      "union": 4339,
+      "false_positive_pixels": 5,
+      "false_negative_pixels": 183,
+      "false_positive_fraction": 0.001203079884504331,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 3915.2818615562137,
+          "outside": 50.51242492429674,
+          "total": 3965.7942866183184,
+          "outside_fraction": 0.01273702599621457
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1671.5676212887493,
+        "outside_sam_absolute": 20.67146814653904,
+        "outside_sam_fraction": 0.012366516246947703,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 4,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.9441267047954246,
+      "intersection": 4292,
+      "union": 4546,
+      "false_positive_pixels": 8,
+      "false_negative_pixels": 246,
+      "false_positive_fraction": 0.0018604651162790699,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4070.071288332025,
+          "outside": 50.51221767938375,
+          "total": 4120.583510733793,
+          "outside_fraction": 0.012258510851146064
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1726.4841943166875,
+        "outside_sam_absolute": 21.259722398205582,
+        "outside_sam_fraction": 0.012313881857817883,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 5,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.913034497004751,
+      "intersection": 4420,
+      "union": 4841,
+      "false_positive_pixels": 8,
+      "false_negative_pixels": 413,
+      "false_positive_fraction": 0.0018066847335140017,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4191.004671818591,
+          "outside": 34.32531287551757,
+          "total": 4225.3299807096355,
+          "outside_fraction": 0.008123699931656628
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1750.924857717632,
+        "outside_sam_absolute": 14.197899266188642,
+        "outside_sam_fraction": 0.008108799874310945,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 6,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "excluded_from_aggregation",
+      "iou": 0.8949063821220052,
+      "intersection": 4445,
+      "union": 4967,
+      "false_positive_pixels": 44,
+      "false_negative_pixels": 478,
+      "false_positive_fraction": 0.009801737580752952,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4213.982846187348,
+          "outside": 76.52163489244356,
+          "total": 4290.504480248068,
+          "outside_fraction": 0.01783511362002336
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1774.7881385305411,
+        "outside_sam_absolute": 29.892459048580577,
+        "outside_sam_fraction": 0.016842832335655807,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 7,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.8884046987495263,
+      "intersection": 4689,
+      "union": 5278,
+      "false_positive_pixels": 2,
+      "false_negative_pixels": 587,
+      "false_positive_fraction": 0.00042634832658281814,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4415.4457020109285,
+          "outside": 33.94932746690483,
+          "total": 4449.39502877818,
+          "outside_fraction": 0.007630099653396574
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1828.89614747319,
+        "outside_sam_absolute": 13.683408094001265,
+        "outside_sam_fraction": 0.0074817851811357985,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 8,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.8995593095850165,
+      "intersection": 4899,
+      "union": 5446,
+      "false_positive_pixels": 3,
+      "false_negative_pixels": 544,
+      "false_positive_fraction": 0.0006119951040391676,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4619.208567624619,
+          "outside": 32.406216962657595,
+          "total": 4651.614786859891,
+          "outside_fraction": 0.006966659632736628
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1940.4487156674281,
+        "outside_sam_absolute": 12.952485566486416,
+        "outside_sam_fraction": 0.006674995047231298,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 9,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.9158527422990232,
+      "intersection": 4876,
+      "union": 5324,
+      "false_positive_pixels": 15,
+      "false_negative_pixels": 433,
+      "false_positive_fraction": 0.003066857493355142,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4608.90798521353,
+          "outside": 51.63128305818532,
+          "total": 4660.539263976793,
+          "outside_fraction": 0.01107839246356415
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1954.548202765544,
+        "outside_sam_absolute": 19.463437498427453,
+        "outside_sam_fraction": 0.009958023788253521,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 10,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "training",
+      "iou": 0.9242795253343379,
+      "intersection": 4907,
+      "union": 5309,
+      "false_positive_pixels": 15,
+      "false_negative_pixels": 387,
+      "false_positive_fraction": 0.0030475416497358796,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4572.394250720845,
+          "outside": 65.05755968609151,
+          "total": 4637.45181434279,
+          "outside_fraction": 0.014028730063540579
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 1944.7399476150247,
+        "outside_sam_absolute": 24.996605302505372,
+        "outside_sam_fraction": 0.012853443635567069,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    },
+    {
+      "frame": 11,
+      "reliable": true,
+      "selected_static_count": 0,
+      "selected_dynamic_count": 8227,
+      "aggregation_role": "excluded_from_aggregation",
+      "iou": 0.868135838150289,
+      "intersection": 4806,
+      "union": 5536,
+      "false_positive_pixels": 333,
+      "false_negative_pixels": 397,
+      "false_positive_fraction": 0.0647985989492119,
+      "visible_mass": {
+        "static": {
+          "inside": 0.0,
+          "outside": 0.0,
+          "total": 0.0,
+          "outside_fraction": null
+        },
+        "dynamic": {
+          "inside": 4419.512259282982,
+          "outside": 382.61456323488096,
+          "total": 4802.1268241307125,
+          "outside_fraction": 0.07967606380411295
+        }
+      },
+      "recolor_change": {
+        "total_absolute": 2019.6997485307502,
+        "outside_sam_absolute": 150.42975809382835,
+        "outside_sam_fraction": 0.07448124811782539,
+        "meaning": "pixel RGB change, not a geometric contamination verdict"
+      }
+    }
+  ],
+  "evaluation_is_exploratory": true,
+  "baseline_highlight_isolated_comparison": {
+    "frames": 72,
+    "maximum_mean_absolute_8bit_difference_from_previous_verified_renders": 0.0
+  },
+  "visual_review": {
+    "kind": "phase-two-visual-acceptance",
+    "reviewed_at": "2026-10-28T04:58:21.139220+00:00",
+    "render_report_sha256": "ed6a4fe9a255e092e5426bd6607f0e2cb7192ff6c6910d71295f54e501d388f7",
+    "video_manifest_sha256": "588e91ace6b5b8d62c8e7116a6cdf5053600f6a40e0c3ba05dca03deb50f8fa9",
+    "object_id": "166dfad9-bd7b-5a98-ae91-b0ed44de8807",
+    "selection_sha256": "c757ac57b6fd1d73f1bc5f26e4644aec1e08bd1916ffc98551bc99a84c818c19",
+    "source_and_nearby_frames_reviewed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "native_modes_reviewed": [
+      "baseline",
+      "highlight",
+      "isolated",
+      "recolored",
+      "translated"
+    ],
+    "encoded_comparison_frames_visually_inspected": [
+      0,
+      6,
+      11
+    ],
+    "all_export_frames_decoded": true,
+    "all_comparison_encoded_frames_compared_to_composite_png": true,
+    "review_method": "Native contact sheets for all 120 renders; decoded MP4 beginning/middle/end inspection; all 12 encoded comparison frames numerically compared to input composites. No real-time playback claim.",
+    "milestones": {
+      "07": "demonstrated on this discrete sample: frozen UUID and 8227 dynamic rows; confidence/leakage retained",
+      "08": "demonstrated: coherent highlight/isolation at all 12 source/nearby states, holes/floaters remain",
+      "09": "demonstrated limited constant-RGB recolor; small boundary/outlier spill and removed shading",
+      "10": "fixed world translation and export executed; motion retained but large residual/ghosting makes clean-move visual acceptance fail"
+    },
+    "gate_b": "demonstrated via roadmap highlight/recolor fallback with independently playable real rendered output",
+    "gate_b_fallback_demonstrated": true,
+    "full_phase_two_translation_quality_pass": false,
+    "phase_three_started": false,
+    "additional_attempts": 0,
+    "findings": [
+      "The same recognizable balloon remains isolated as its pose changes through twelve states.",
+      "Orange-red recoloring stays on the balloon in both views; boundaries are imperfect, and frame 11 has visible floaters above the object.",
+      "No broad wall/person recoloring is apparent; source pixel-change outside SAM is nonzero and reported separately.",
+      "Translated balloon follows the original pose sequence at a consistent offset; original-position mottled green remnants/disocclusion artifacts are conspicuous in both views.",
+      "The visible transform artifacts are already present in native PNGs, not caused by MP4 encoding.",
+      "No inpainting, contact, shadow correction, wide-view evaluation or interpolated motion has been performed."
+    ],
+    "cause_limit": "Unselected object remnants and poorly reconstructed disoccluded background are possible contributors; this run does not isolate their respective contribution.",
+    "next_smallest_diagnostic": "If further transformation work is requested, inspect remaining unselected contributions at the original object location before attempting cleanup or inpainting. No extra paid run is authorized by this report.",
+    "video_sha256": {
+      "baseline": "20dcda3f73915cff323490e530ab2edc252ff86ef8132f32c670eeaf1f0d1e7c",
+      "recolored": "97637618845f57dff2682e5ca2c0485db08c71ad97177e2bb299ac9e71a4687e",
+      "translated": "bed3e86980593b88a606c5419efe60723dd422195503fbe331a07360c1c28003",
+      "edits-comparison": "76aff656240fd09116be34f50195ec1c9a1320bd7bce9054288b489dec826270",
+      "selection-comparison": "5e8fff799954230492000ed7c9a8305d7d1fa2142be47fd36818d7ce7befb04e"
+    }
+  },
+  "exports": {
+    "baseline": {
+      "file": "balloon2-baseline.mp4",
+      "sha256": "20dcda3f73915cff323490e530ab2edc252ff86ef8132f32c670eeaf1f0d1e7c",
+      "bytes": 405183,
+      "decoded_frames": 12,
+      "duration_seconds": 4.0,
+      "width": 480,
+      "height": 270,
+      "codec": "h264"
+    },
+    "recolored": {
+      "file": "balloon2-recolored.mp4",
+      "sha256": "97637618845f57dff2682e5ca2c0485db08c71ad97177e2bb299ac9e71a4687e",
+      "bytes": 405475,
+      "decoded_frames": 12,
+      "duration_seconds": 4.0,
+      "width": 480,
+      "height": 270,
+      "codec": "h264"
+    },
+    "translated": {
+      "file": "balloon2-translated.mp4",
+      "sha256": "bed3e86980593b88a606c5419efe60723dd422195503fbe331a07360c1c28003",
+      "bytes": 426687,
+      "decoded_frames": 12,
+      "duration_seconds": 4.0,
+      "width": 480,
+      "height": 270,
+      "codec": "h264"
+    },
+    "edits-comparison": {
+      "file": "balloon2-edits-comparison.mp4",
+      "sha256": "76aff656240fd09116be34f50195ec1c9a1320bd7bce9054288b489dec826270",
+      "bytes": 2450705,
+      "decoded_frames": 12,
+      "duration_seconds": 4.0,
+      "width": 1440,
+      "height": 640,
+      "codec": "h264"
+    },
+    "selection-comparison": {
+      "file": "balloon2-selection-comparison.mp4",
+      "sha256": "5e8fff799954230492000ed7c9a8305d7d1fa2142be47fd36818d7ce7befb04e",
+      "bytes": 1673317,
+      "decoded_frames": 12,
+      "duration_seconds": 4.0,
+      "width": 1440,
+      "height": 640,
+      "codec": "h264"
+    }
+  },
+  "playback": {
+    "states": 12,
+    "fps": 3,
+    "seconds": 4,
+    "cadence": "chosen playback rate; original acquisition timing unverified",
+    "interpolation": false
+  },
+  "billing": {
+    "checked_at": "2026-10-28T04:58:08.617487+00:00",
+    "metered_usage_usd": 4.50088206,
+    "billed_usd": 0.0,
+    "preflight_metered_usage_usd": 4.35084931,
+    "snapshot_increase_usd": 0.15003275000000027,
+    "remaining_original_30_credit_estimate_usd": 25.5,
+    "credit_balance_method": "original user-verified $30 grant minus credits shown used; remaining grant balance not exposed by SDK",
+    "reconciliation": "pending; snapshot delta is not an isolated final job invoice",
+    "app_stopped": true,
+    "active_tasks": 0,
+    "active_gpus": 0,
+    "effective_net_spend_limit_usd": 0.0,
+    "planning_ceiling_usd": 3.43
+  },
+  "artifact_sha256": {
+    "raw_result": "2648a77a326340135cce19fe68e15e54801da2ce67af20d258aa75aff3648235",
+    "render_report": "ed6a4fe9a255e092e5426bd6607f0e2cb7192ff6c6910d71295f54e501d388f7",
+    "video_manifest": "588e91ace6b5b8d62c8e7116a6cdf5053600f6a40e0c3ba05dca03deb50f8fa9",
+    "visual_review": "667d4b83765536d86b5c84f4c2baed0e856f9bbf8e61ee5ce622a96ece4e9f32"
+  },
+  "tests": {
+    "cpu_passed": 96,
+    "cuda_skipped_on_cpu_host": 1,
+    "actual_remote_cuda_test_passed": 1
+  },
+  "licenses": "Existing MoSca/rasterizer/SAM/benchmark restrictions still apply. Only code and factual metrics are published; footage/checkpoints remain private."
+}
