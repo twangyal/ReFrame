@@ -87,6 +87,11 @@ def main():
             with finite_loss_guard():
                 function(str(a.workspace),str(a.output),cfg)
         if not (a.output/target).is_file():raise RuntimeError('upstream omitted expected stage output')
+        if a.stage=='photo' and cfg.photo_lr_np==0 and cfg.photo_lr_np_final==0:
+            from scripts.custom_stages import verify_fixed_positions
+            report['fixed_positions']=verify_fixed_positions(
+                torch.load(a.output/'mosca/mosca.pth',map_location='cpu',weights_only=True),
+                torch.load(a.output/'photometric_d_model_native_add3.pth',map_location='cpu',weights_only=True))
         report['checkpoint_tensor_elements']={str(p.relative_to(a.output)):validate_checkpoint(p) for p in a.output.rglob('*.pth')}
         report['passed']=True
     finally:

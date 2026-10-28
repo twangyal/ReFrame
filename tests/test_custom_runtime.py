@@ -49,3 +49,43 @@ class CustomRuntimeTests(unittest.TestCase):
                 with self.assertRaisesRegex(FloatingPointError,'nonfinite'):x.backward()
                 self.assertIsNone(x.grad)
         self.assertIs(torch.Tensor.backward,original)
+
+    def test_fixed_positions_profile_requires_quality_photo_stage(self):
+        for extra,ok in [(['--quality-fit','--fit-stage','photo'],True),([],False),(['--quality-fit','--fit-stage','camera'],False)]:
+            result=subprocess.run([sys.executable,'scripts/modal_custom.py','--fixed-positions',*extra],capture_output=True,text=True)
+            self.assertEqual(result.returncode==0,ok,result.stderr)
+            if ok:
+                plan=json.loads(result.stdout)
+                self.assertTrue(plan['fixed_positions'])
+                self.assertEqual(plan['input_timeout_seconds'],1500)
+                self.assertLessEqual(plan['estimated_ceiling_usd'],4.30)
+
+    def test_fixed_positions_config_rejects_other_experiment_changes(self):
+        from scripts import modal_custom
+        self.assertTrue(hasattr(modal_custom,'validate_quality_config'),'missing bounded experiment configuration validator')
+        base=json.loads(Path('configs/custom-cat-quality-4000.json').read_text())
+        fixed={**base,'photo_lr_np':0.0,'photo_lr_np_final':0.0}
+        modal_custom.validate_quality_config(fixed,fixed_positions=True)
+        for wrong in [base,{**fixed,'photo_lr_nq':0.0},{**fixed,'photo_total_steps':5000}]:
+            with self.assertRaises(ValueError):modal_custom.validate_quality_config(wrong,fixed_positions=True)
+        with self.assertRaises(ValueError):modal_custom.validate_quality_config(fixed)
+
+    def test_frozen_scaffold_check_detects_position_or_identity_changes(self):
+        import torch
+        from scripts import custom_stages
+        self.assertTrue(hasattr(custom_stages,'verify_fixed_positions'),'missing observed checkpoint invariant')
+        original={'_node_xyz':torch.arange(18,dtype=torch.float32).reshape(2,3,3),'_node_certain':torch.ones(2,3,dtype=torch.bool),'_t_list':torch.arange(2)}
+        fitted={'scf.'+k:v.clone() for k,v in original.items()}
+        result=custom_stages.verify_fixed_positions(original,fitted)
+        self.assertTrue(result['positions_unchanged'])
+        for key in ['scf._node_xyz','scf._node_certain','scf._t_list']:
+            changed={k:v.clone() for k,v in fitted.items()}
+            changed[key].flatten()[0]=0 if key.endswith('certain') else 99
+            with self.assertRaises(ValueError):custom_stages.verify_fixed_positions(original,changed)
+
+    def test_frozen_position_config_cannot_bypass_named_experiment_guard(self):
+        for flags in [[],['--quality-fit']]:
+            result=subprocess.run([sys.executable,'scripts/modal_custom.py','--fit-stage','photo',
+                '--config','configs/custom-cat-fixed-positions-4000.json',*flags],capture_output=True,text=True)
+            self.assertNotEqual(result.returncode,0,'generic path accepted fixed-position config without its guard')
+            self.assertIn('fixed-positions',result.stderr)

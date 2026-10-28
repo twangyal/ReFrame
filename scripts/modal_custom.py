@@ -21,6 +21,13 @@ from scripts.custom_tracking import stage_priors,stage_weight,digest
 WHEEL='torch_cluster-1.6.3+pt21cu118-cp310-cp310-linux_x86_64.whl'
 WHEEL_SHA='c3c91386aa7037384c7ccbabcdef302e61333186a51a7d5ac58c80b40e22bd5a'
 
+def validate_quality_config(config, fixed_positions=False):
+    expected={**json.loads((ROOT/'configs/custom-cat-fit.json').read_text()),'photo_total_steps':4000}
+    if fixed_positions:
+        expected.update(photo_lr_np=0.0,photo_lr_np_final=0.0)
+    if config!=expected:
+        raise ValueError('quality-fit configuration differs from the selected bounded experiment')
+
 def stage(mosca,priors,weight,wheel,destination):
     revision=json.loads((ROOT/'upstream-revisions.json').read_text())['mosca']['commit']
     actual=subprocess.check_output(['git','-C',str(mosca),'rev-parse','HEAD'],text=True).strip()
@@ -51,16 +58,22 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--execute',action='store_true')
     p.add_argument('--quality-fit',action='store_true',help='explicit 4000-step photo experiment, 25-minute cap and 4.30-dollar ceiling')
+    p.add_argument('--fixed-positions',action='store_true',help='separately authorized quality-fit ablation with scaffold position learning rates zero')
     for name in ('approval','mosca','priors','weight','wheel','out'):p.add_argument('--'+name,type=Path)
     p.add_argument('--gpu',choices=['A100-40GB','A100-80GB','A100'],default='A100-40GB')
     p.add_argument('--fit-stage',choices=['camera','scaffold','photo','playback'])
     for name in ('tracks','config','previous'):p.add_argument('--'+name,type=Path)
     p.add_argument('--cumulative-budget-usd',type=float,default=5,help='explicit verified existing-credit envelope, never above 30')
     args=p.parse_args()
+    if args.fixed_positions and not args.quality_fit:p.error('fixed-positions requires quality-fit')
+    if args.fit_stage=='photo' and args.config is not None:
+        candidate=json.loads(args.config.read_text())
+        if candidate.get('photo_lr_np')==0 and candidate.get('photo_lr_np_final')==0 and not args.fixed_positions:
+            p.error('fixed-position configuration requires --quality-fit --fixed-positions')
     budget=args.cumulative_budget_usd
     from scripts.modal_custom_worker import runtime_limits
     limits=runtime_limits(args.quality_fit)
-    plan={**PLAN,**limits}
+    plan={**PLAN,**limits,'fixed_positions':args.fixed_positions}
     if args.quality_fit:
         if args.fit_stage!='photo':p.error('quality-fit is limited to the approved photo experiment')
         plan['estimated_ceiling_usd']=round((limits['input_timeout_seconds']+120+2)/3600*(4+2*.10+41.6*.02)+2,4)
@@ -70,12 +83,12 @@ def main():
     if not all(getattr(args,k) for k in ('approval','mosca','priors','weight','wheel','out')):p.error('execution requires explicit inputs, new output and approval evidence')
     if args.quality_fit:
         if args.config is None:p.error('quality-fit requires its config')
-        base=json.loads((ROOT/'configs/custom-cat-fit.json').read_text())
-        if json.loads(args.config.read_text())!={**base,'photo_total_steps':4000}:
-            raise ValueError('quality-fit may change only photo_total_steps to 4000')
+        validate_quality_config(json.loads(args.config.read_text()),args.fixed_positions)
     approval=json.loads(args.approval.read_text());validate_approval(approval,cumulative_budget_usd=budget,plan=plan)
     if args.quality_fit and approval.get('quality_fit_4000_authorized') is not True:
         raise ValueError('quality-fit requires explicit experiment authorization')
+    if args.fixed_positions and approval.get('fixed_positions_fit_authorized') is not True:
+        raise ValueError('fixed-positions requires separate explicit experiment authorization')
     if args.gpu=='A100' and set(approval.get('authorized_gpus',[]))!={'A100-40GB','A100-80GB'}:
         raise ValueError('A100 preference requires authorization for both memory sizes')
     if args.gpu not in ('A100-40GB','A100') and approval.get('explicit_gpu_authorization')!=args.gpu:

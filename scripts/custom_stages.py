@@ -125,6 +125,17 @@ def validate_checkpoint(path):
     return count
 
 
+def verify_fixed_positions(original, fitted):
+    """Require exact saved scaffold positions and identities after a frozen-position fit."""
+    import torch
+    for key in ('_node_xyz','_node_certain','_t_list'):
+        if not torch.equal(original[key],fitted['scf.'+key]):
+            raise ValueError('fixed-position scaffold changed: '+key)
+    return dict(positions_unchanged=True,node_identity_unchanged=True,
+                node_count=int(original['_node_xyz'].shape[1]),
+                timestamps=int(original['_node_xyz'].shape[0]))
+
+
 from contextlib import contextmanager
 
 @contextmanager
