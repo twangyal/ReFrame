@@ -22,7 +22,8 @@ without a clear overall visual improvement.
 These are distinct experiments: no hosted SAM request or semantic Gaussian
 selection was run on the cat. Phase 1 pipeline evidence exists across these experiments, but custom
 reconstruction quality remains unresolved;
-no Phase 2 editor or transformation is claimed. [Phase 1 audit](docs/PHASE1.md).
+Phase 2 recolor/translation and verified video export are implemented and CPU-tested;
+real edited rendering and Gate B are pending. [Phase 2 status and GPU plan](docs/PHASE2.md). [Phase 1 audit](docs/PHASE1.md).
 
 ## Setup and checks
 

@@ -63,6 +63,16 @@ def validate_approval(value, *, cumulative_budget_usd=5, plan=None):
         raise ValueError('approval needs workspace and non-secret billing/control evidence reference')
 
 
+def validate_edit_approval(value, recipe_sha256, selection_sha256):
+    if (value.get('phase_two_edits_authorized') is not True
+        or value.get('edit_recipe_sha256')!=recipe_sha256
+        or value.get('selection_sha256')!=selection_sha256):
+        raise ValueError('Phase 2 rendering requires specific recipe/selection authorization')
+    if set(value.get('authorized_gpus',[]))!={'A100-40GB','A100-80GB'}:
+        raise ValueError('Phase 2 run requires explicit 40GB/80GB allocation approval')
+    validate_approval(value,cumulative_budget_usd=30)
+
+
 def claim_approval(value, directory):
     """One local launch per canonical approval record, including uncertain failures."""
     digest = hashlib.sha256(json.dumps(value,sort_keys=True).encode()).hexdigest()
@@ -121,13 +131,28 @@ def stage_sources(mosca, destination, real_scene=False):
 
 
 def stage_association(frames,masks,baseline,destination,*,min_frame_mass=1.,threshold=.8,
-                      selection=None,all_frames=False):
+                      selection=None,all_frames=False,edit_recipe=None):
     """Copy only explicit, bounded inputs; never a cache, key or user directory."""
+    if edit_recipe is not None:
+        if selection is None:raise ValueError('edit recipe requires saved selection')
+        # The isolated Modal SDK interpreter intentionally lacks NumPy/Torch.
+        # Validate numerical sidecars in the project's CPU environment, never
+        # import the research stack into the SDK process or install it remotely.
+        import importlib.util
+        validator=(Path(sys.executable) if all(importlib.util.find_spec(n) is not None for n in ('numpy','PIL'))
+                   else ROOT/'.venv/bin/python')
+        if not validator.is_file():raise ValueError('prepare the CPU .venv before staging edit inputs')
+        subprocess.run([str(validator),'-c',
+            'import json,sys; from reframe.editing import validate_edit_recipe; '
+            'from reframe.selection import load_selection; '
+            'validate_edit_recipe(json.load(open(sys.argv[1])),load_selection(sys.argv[2]))',
+            str(edit_recipe.resolve()),str(selection.resolve())],cwd=ROOT,check=True)
     manifest=json.loads((frames/'manifest.json').read_text())
     if (manifest['frame_count'],manifest['height'],manifest['width'])!=(12,270,480):
         raise ValueError('bounded association runner expects the inspected Balloon2 sample')
     paths=[(frames/'manifest.json','frames/manifest.json'),(masks,'masks.npz'),(baseline,'baseline.json')]
     if selection is not None:paths.append((selection,'render-selection.npz'))
+    if edit_recipe is not None:paths.append((edit_recipe,'edit-recipe.json'))
     if all_frames and selection is None:raise ValueError('all-frame render requires a saved selection')
     for row in manifest['frames']:
         name=row['file']
@@ -143,7 +168,7 @@ def stage_association(frames,masks,baseline,destination,*,min_frame_mass=1.,thre
         data=src.read_bytes();out=root/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(data)
         hashes[rel]=hashlib.sha256(data).hexdigest()
     settings=json.dumps({'min_frame_mass':min_frame_mass,'threshold':threshold,
-                         'mode':'render-selection' if selection is not None else 'associate',
+                         'mode':'render-edits' if edit_recipe is not None else ('render-selection' if selection is not None else 'associate'),
                          'all_frames':all_frames},sort_keys=True).encode()
     (root/'settings.json').write_bytes(settings)
     hashes['settings.json']=hashlib.sha256(settings).hexdigest()
@@ -159,6 +184,7 @@ def main():
     parser.add_argument('--real-scene',action='store_true',help='probe pinned Balloon2 checkpoint without SAM')
     parser.add_argument('--associate',action='store_true',help='associate existing cached masks, no SAM inference')
     parser.add_argument('--render-selection',type=Path,help='render a compact saved sidecar without reassociation')
+    parser.add_argument('--edit-recipe',type=Path,help='Phase 2 saved-selection edits; requires separate bound approval')
     parser.add_argument('--all-frames',action='store_true',help='saved-selection mode only; render all 12 discrete times')
     parser.add_argument('--frames',type=Path)
     parser.add_argument('--masks',type=Path)
@@ -168,15 +194,24 @@ def main():
     args = parser.parse_args()
     if args.associate and args.render_selection:parser.error('choose association or saved-selection rendering')
     if args.all_frames and not args.render_selection:parser.error('--all-frames requires --render-selection')
+    if args.edit_recipe and not args.render_selection:parser.error('--edit-recipe requires --render-selection')
     stream_selection=bool(args.associate or args.render_selection)
     if not args.execute:
         print(json.dumps({**PLAN,'real_scene':args.real_scene,'associate':args.associate,
-                          'saved_selection_render':bool(args.render_selection),'all_frames':args.all_frames},indent=2))
+                          'saved_selection_render':bool(args.render_selection),'all_frames':args.all_frames,
+                          'phase_two_edits':bool(args.edit_recipe),
+                          'gpu':['A100-40GB','A100-80GB'] if args.edit_recipe else PLAN['gpu'],
+                          'cumulative_budget_usd':30 if args.edit_recipe else 5},indent=2))
         return
     if not args.approval:
         parser.error('--execute requires --approval with verified billing/access evidence')
     approval = json.loads(args.approval.read_text())
-    validate_approval(approval)
+    def validate_run():
+        if args.edit_recipe:
+            validate_edit_approval(approval,hashlib.sha256(args.edit_recipe.read_bytes()).hexdigest(),
+                                   hashlib.sha256(args.render_selection.read_bytes()).hexdigest())
+        else:validate_approval(approval)
+    validate_run()
     if args.mosca is None or args.out is None:
         parser.error('--execute also requires --mosca and a new --out directory')
     if stream_selection and (not args.real_scene or not all([args.frames,args.masks,args.baseline])):
@@ -189,10 +224,13 @@ def main():
         provenance['real_scene'] = args.real_scene
         provenance['associate'] = args.associate
         provenance['saved_selection_render'] = bool(args.render_selection)
+        provenance['phase_two_edits'] = bool(args.edit_recipe)
+        if args.edit_recipe:
+            provenance.update(gpu=['A100-40GB','A100-80GB'],cumulative_budget_usd=30)
         if stream_selection:
             provenance['association_input_sha256']=stage_association(args.frames,args.masks,args.baseline,source,
                 min_frame_mass=args.min_frame_mass,threshold=args.threshold,
-                selection=args.render_selection,all_frames=args.all_frames)
+                selection=args.render_selection,all_frames=args.all_frames,edit_recipe=args.edit_recipe)
         (args.out/'plan.json').write_text(json.dumps({**PLAN,**provenance},indent=2))
         import importlib.metadata
         if importlib.metadata.version('modal') != PLAN['modal_sdk_version']:
@@ -210,11 +248,11 @@ def main():
         # Read-only identity lookup precedes all source uploads and image work.
         workspace = modal.Workspace.from_context().hydrate()
         verify_workspace(workspace.name, approval)
-        validate_approval(approval)
+        validate_run()
         claim = claim_approval(approval,ROOT/'.cache/modal-launch-claims')
         (args.out/'launch-claim.txt').write_text(str(claim))
         app = modal.App('reframe-renderer-smoke',include_source=False)
-        image = (modal.Image.from_registry(IMAGE).env({'PYTHONPATH':'/smoke'})
+        image = (modal.Image.from_registry(IMAGE).env({'PYTHONPATH':'/smoke','REFRAME_EXPECTED_GPU':'A100' if args.edit_recipe else 'A100-40GB'})
                  .add_local_dir(source,'/smoke',copy=False))
         # Importable staged source avoids cloudpickling local Python bytecode
         # into the older reference image's Python interpreter.
@@ -225,7 +263,7 @@ def main():
             from scripts.modal_scene_worker import remote_entrypoint
         else:
             from scripts.modal_smoke_worker import remote_entrypoint
-        smoke = app.function(image=image,gpu='A100-40GB',cpu=(2,2),memory=(16384,16384),
+        smoke = app.function(image=image,gpu=['A100-40GB','A100-80GB'] if args.edit_recipe else 'A100-40GB',cpu=(2,2),memory=(16384,16384),
                       routing_region='us-east',
                       timeout=900,startup_timeout=120,
                       # SDK 1.6.2 forbids even retries=0 for generators;

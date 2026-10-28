@@ -73,3 +73,17 @@ class ModalGateTests(unittest.TestCase):
         for size in (40,80):validate_gpu('NVIDIA A100',size*1024**3,'A100')
         for name,size in [('NVIDIA H100',80),('NVIDIA A100',20),('NVIDIA A100',60)]:
             with self.assertRaises(ValueError):validate_gpu(name,size*1024**3,'A100')
+
+    def test_phase_two_needs_specific_unused_authorization_and_total_budget(self):
+        from datetime import datetime,timezone
+        base=dict(verified_at=datetime.now(timezone.utc).isoformat(),workspace='twangyal',balance_usd=25,
+                  prior_trial_usage_usd=4.37,prior_billing_uncertainty_allowance_usd=.5,
+                  no_overage_verified=True,rates_within_plan_verified=True,overhead_within_plan_verified=True,
+                  secure_auth_verified=True,network_access_verified=True,no_concurrent_spend_verified=True,
+                  ephemeral_disk_cost_bound_verified=True,evidence='fixture')
+        with self.assertRaises(ValueError):runner.validate_edit_approval(base,'a'*64,'b'*64)
+        base.update(phase_two_edits_authorized=True,edit_recipe_sha256='a'*64,selection_sha256='b'*64,
+                    authorized_gpus=['A100-40GB','A100-80GB'])
+        runner.validate_edit_approval(base,'a'*64,'b'*64)
+        with self.assertRaises(ValueError):runner.validate_edit_approval(base,'c'*64,'b'*64)
+        with self.assertRaises(ValueError):runner.validate_edit_approval({**base,'prior_trial_usage_usd':29},'a'*64,'b'*64)

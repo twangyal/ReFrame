@@ -78,14 +78,15 @@ def association_entrypoint():
 
 def selection_command(settings,checkpoint):
     mode=settings.get('mode','associate')
-    if mode not in ('associate','render-selection'):raise ValueError('invalid selection worker mode')
+    if mode not in ('associate','render-selection','render-edits'):raise ValueError('invalid selection worker mode')
     command=[sys.executable,'-m','reframe.cli',mode,'--mosca','/tmp/mosca',
              '--checkpoint',str(checkpoint),'--scene-source','/tmp/scene-originals/nvidia/Balloon2',
              '--frames','/smoke/association-input/frames','--masks','/smoke/association-input/masks.npz',
              '--out','/tmp/scene-selection']
-    if mode=='render-selection':
+    if mode in ('render-selection','render-edits'):
         command+=['--selection','/smoke/association-input/render-selection.npz']
-        if settings.get('all_frames'):command+=['--all-frames']
+        if mode=='render-edits':command+=['--recipe','/smoke/association-input/edit-recipe.json']
+        elif settings.get('all_frames'):command+=['--all-frames']
     else:
         command+=['--baseline','/smoke/association-input/baseline.json','--threshold',str(settings['threshold']),
                   '--min-frame-mass',str(settings['min_frame_mass'])]
@@ -149,7 +150,7 @@ def main():
     for m in manifest['members']:
         if digest(Path('/tmp/scene-originals')/m['archive_path']) != m['sha256']:
             raise ValueError('original sample changed during probe')
-    report = {'kind':('saved-selection-render' if settings.get('mode')=='render-selection' else 'real-mask-association') if association else 'real-mosca-baseline','passed':True,
+    report = {'kind':({'render-selection':'saved-selection-render','render-edits':'gaussian-object-edits'}.get(settings.get('mode'),'real-mask-association')) if association else 'real-mosca-baseline','passed':True,
               'real_scene_selection_demonstrated':False,'sam_called':False,
               'elapsed_seconds':time.monotonic()-started,
               'original_hashes_preserved':True,

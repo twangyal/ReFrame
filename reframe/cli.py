@@ -197,8 +197,12 @@ def render_saved(args):
         if out==source or source in out.parents:raise ValueError('render outputs must stay outside source directories')
     if out.exists():raise FileExistsError(out)
     scene=FrozenMoSca(args.mosca,args.checkpoint)
-    report=render_selection(scene,selection,masks,reliable,out,
-                            times=list(range(scene.frame_count)) if args.all_frames else None)
+    if args.command=='render-edits':
+        from .edit_render import render_edits
+        report=render_edits(scene,selection,masks,reliable,json.loads(Path(args.recipe).read_text()),out)
+    else:
+        report=render_selection(scene,selection,masks,reliable,out,
+                                times=list(range(scene.frame_count)) if args.all_frames else None)
     # Preserve the exact compact selection used to render, for report/output binding.
     import shutil
     shutil.copyfile(args.selection,out/'selection.npz')
@@ -229,6 +233,9 @@ def main():
     for name in ('mosca','checkpoint','scene-source','frames','masks','selection','out'):
         render.add_argument('--'+name,required=True)
     render.add_argument('--all-frames',action='store_true',help='render every discrete reconstruction frame')
+    edits=commands.add_parser('render-edits',help='render frozen object recolor/translation at every discrete time')
+    for name in ('mosca','checkpoint','scene-source','frames','masks','selection','recipe','out'):
+        edits.add_argument('--'+name,required=True)
     for name in ['probe-mosca','associate']:
         q=commands.add_parser(name)
         q.add_argument('--mosca',required=True);q.add_argument('--checkpoint',required=True);q.add_argument('--out',required=True)
@@ -245,7 +252,7 @@ def main():
             if not a.response and not a.video: p.error('segment requires --video or --response')
             segment(a)
         elif a.command=='probe-mosca': probe(a)
-        elif a.command=='render-selection': render_saved(a)
+        elif a.command in ('render-selection','render-edits'): render_saved(a)
         elif a.command=='revise-selection':
             from .selection import revise_selection
             report=revise_selection(a.selection,a.out,threshold=a.threshold,min_frame_mass=a.min_frame_mass,
