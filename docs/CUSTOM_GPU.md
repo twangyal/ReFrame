@@ -150,3 +150,24 @@ This does not implement resumable optimization or authorize further experiments.
 The approved quality run completed on A100 40GB in 1047.30 seconds including
 setup/rendering. See [quality results](CUSTOM_RESULTS.md) for measured improvement,
 residual failures and billing. This single completed run does not authorize retries.
+
+## Fixed scaffold position comparison
+
+The named `--quality-fit --fixed-positions --fit-stage photo` experiment uses
+`configs/custom-cat-fixed-positions-4000.json`. It differs from the preceding
+4,000-step profile only in `photo_lr_np=0` and `photo_lr_np_final=0`. Scaffold
+rotations, Gaussian parameters, cameras and all other fitting settings remain
+eligible for the same optimization as before. This tests position drift; it is
+not an assumption that freezing positions improves reconstructed images.
+
+The same 1,500-second invocation cap and $4.2672 conservative whole-run estimate
+apply. Fresh private execution evidence must include both
+`quality_fit_4000_authorized=true` and `fixed_positions_fit_authorized=true`;
+prior one-use authorization records cannot be reused. The generic photo command
+rejects this zero-position-learning-rate configuration without the named flags.
+
+Start from the preserved scaffold-stage archive, use a new output directory,
+and preserve both earlier photometric fits. Before reporting success, the runner
+requires exact equality of saved scaffold positions, timestamp IDs and certainty
+masks against the input scaffold. This invariant is separate from visual quality:
+compare matched source and nearby renders, head/tail detail and temporal artifacts.
