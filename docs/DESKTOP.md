@@ -15,10 +15,21 @@ simulate a new edit. Only the verified orange preset and two saved viewpoints
 are offered. Clean translation failed visual acceptance and is visibly disabled.
 The earlier blur experiments remain paused.
 
-The user authorized Phase 3 desktop work on October 30. The original roadmap DOCX
-is not present in this executor; its exact Phase 3 excerpt has been requested
-from the coordinator. This document records the implemented workflow without
-inventing milestone numbers or claiming all roadmap exit criteria are complete.
+## Roadmap acceptance audit
+
+The coordinator supplied these exact criteria from *ReFrame Hackathon Development
+Roadmap (2).docx*, page 4, on October 30; the original DOCX was read in the
+coordinator's workspace.
+
+| Milestone | Exact criterion | Demonstration and limit |
+| --- | --- | --- |
+| 11 | Load a prepared reconstruction, scrub time, select an object and adjust supported edit parameters. | Demonstrated through a prepared **saved-render bundle**: load, discrete scrub, persistent Gaussian-object selection, highlight/isolation and the orange appearance preset. Loading a live reconstruction for new rendering is not implemented. |
+| 12 | Adjust viewpoint, save and restore an edit, reset transforms, and export a revised camera view. | Two saved camera views, session save/restore and alternate-shot export are demonstrated. Reset clears selection/appearance; **geometric transform reset is not demonstrated**, because clean translation remains unavailable. Arbitrary viewpoint adjustment is not implemented. |
+
+This is constrained evidence for milestones 11–12, not unrestricted completion
+of the original desktop-editor criteria. In particular, the literal transform
+reset requirement remains unmet. The usable demonstration follows the accepted
+highlight/recolor fallback, preserving Phase 2's failed clean-translation result.
 
 ## Launch
 
@@ -125,6 +136,20 @@ and exported the nearby recolor MP4. Screenshots and a hash-bound QA record are
 private task artifacts under `outputs/desktop-qa`. The four-second export has
 12 H264 frames at 480×270. This validates the desktop workflow; it adds no new
 reconstruction, selection-quality or geometry result beyond [Phase 2](PHASE2.md).
+
+A scripted native-window recording under `outputs/desktop-walkthrough` shows
+loading, scrubbing, selection, isolation, recolor, the nearby view, playback,
+save, appearance reset, restore and export. FFmpeg captures actual X display
+pixels at 15 fps; automation supplies file-dialog paths. It does not synthesize
+UI frames or invoke a renderer. The accompanying project JSON and export sidecar
+record the saved state and hash-bound alternate shot. The recording and export
+are private artifacts, not public repository contents.
+
+Private delivery is a separate unresolved step: this executor currently exposes
+no Library upload tool or applicable Library skill. A previous helper request
+failed with HTTP 401; its cause is unknown. No retry, credential change or alternate
+authentication route was attempted during this closeout. Local artifact creation
+and verification must not be described as delivery to the user's iOS chat.
 
 ## Rights and scope
 

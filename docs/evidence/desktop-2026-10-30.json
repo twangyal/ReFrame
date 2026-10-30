@@ -38,7 +38,12 @@
     "desktop_session.py": "44b8f2b7ed0dd0212de696af22cfeb47781fbf354634fb423b5c3e484af75cb1"
   },
   "unpacked_smoke": "Linux launch and recolor MP4 export from extracted directory succeeded; Torch/Modal/OpenAI SDKs not imported.",
-  "roadmap": "Exact Phase 3 excerpt requested; unavailable in executor. No numbered-milestone/full-phase completion claim.",
+  "roadmap": {
+    "source": "Coordinator-read ReFrame_Hackathon_Development_Roadmap(2).docx, page 4",
+    "milestone_11": "Constrained demonstration: prepared saved-render bundle, discrete timeline, persistent object selection, supported appearance preset. No live reconstruction rendering.",
+    "milestone_12": "Constrained demonstration: two saved viewpoints, save/restore, appearance reset, nearby MP4 export. Literal geometric transform reset remains unmet; no arbitrary camera movement.",
+    "full_phase_completion": false
+  },
   "screenshots_sha256": {
     "01-original.png": "e131dace5764d9390d467e0f47437cb22dbc29e05f3de7e954789e1365f3c415",
     "02-highlight.png": "2cd2f9fbbcd59d506347faa2001a6960ffa383e915b86bd642f5e919e3495503",
@@ -49,5 +54,41 @@
   },
   "private_archive_sha256": "65057d36716ec62f637740350a42c75dfe528e857747ff0ad09c38d71bae557a",
   "private_archive_bytes": 18967504,
-  "asset_publication": "Not authorized; all source renders, screenshots, MP4s and demo archive remain private."
+  "asset_publication": "Not authorized; all source renders, screenshots, MP4s and demo archive remain private.",
+  "walkthrough": {
+    "kind": "scripted-native-Tk-screen-recording",
+    "capture": "FFmpeg x11grab, actual window at 15 fps; file dialogs supplied paths by automation",
+    "scene_sha256": "14d1279dd714a3ca6e2ee45d1d666836037e39d592a286c966b471f900600de0",
+    "walkthrough_sha256": "ee248d55cbdcade5ac8804a0972127a166d26accfecba18623d3a07b0497b196",
+    "export_sha256": "ad6de061ebec888ef5798af2b92dacd91b2c65818ce47a71b97be9c4496f1de2",
+    "session_sha256": "227ab71aecfc0c1b8b67b512adbc559fadaa10461c513935522dfd6c73df521f",
+    "duration_seconds": 36.133333,
+    "width": 1220,
+    "height": 820,
+    "no_paid_compute_or_model_calls": true,
+    "visual_review": "Inspected encoded contact sheet across the 36-second recording and full-resolution reset frame. Load, selection, isolation, recolor, source/nearby view, reset and restored recolor are visible; controls and limitations are readable. Full video decode passed.",
+    "actions": [
+      "Scripted native UI walkthrough | Existing saved renders | No GPU or model calls",
+      "11 / Load: verified prepared scene, 12 saved states, persistent Gaussian object",
+      "11 / Scrub: middle saved state (discrete timeline)",
+      "11 / Select: the same 8,227 Gaussian identities, highlighted",
+      "11 / Inspect: isolated selected object",
+      "11 / Appearance: verified orange recolor preset",
+      "12 / Viewpoint: switch to the saved nearby camera (no free orbit)",
+      "Play saved states: original object motion with the chosen appearance",
+      "12 / Save: selection, appearance, camera and timeline stored in project JSON",
+      "12 / Reset: clears selection and appearance; geometric transforms are unavailable",
+      "12 / Restore: saved orange appearance, nearby camera and final state restored",
+      "12 / Export verified: nearby shot, all 12 states, independently playable MP4",
+      "Constrained demo: saved views/preset only. Clean translation failed; no live rendering."
+    ]
+  },
+  "delivery": {
+    "status": "blocked",
+    "library_upload_tools_available": false,
+    "library_skill_available": false,
+    "prior_helper_failure": "HTTP 401; root cause unknown",
+    "retry_attempted": false,
+    "local_paths_are_ios_delivery": false
+  }
 }
