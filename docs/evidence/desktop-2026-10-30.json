@@ -1,0 +1,53 @@
+{
+  "kind": "native-desktop-qa",
+  "scene_sha256": "14d1279dd714a3ca6e2ee45d1d666836037e39d592a286c966b471f900600de0",
+  "frame": 11,
+  "selected_object_id": "166dfad9-bd7b-5a98-ae91-b0ed44de8807",
+  "mode": "recolored",
+  "view": "nearby",
+  "checks": [
+    "native Tk window",
+    "canvas hit selection",
+    "highlight",
+    "isolate",
+    "recolor preset",
+    "nearby view",
+    "play/pause",
+    "timeline seek",
+    "save/reset/reopen session",
+    "asynchronous CPU MP4 export"
+  ],
+  "video_sha256": "ad6de061ebec888ef5798af2b92dacd91b2c65818ce47a71b97be9c4496f1de2",
+  "no_gpu_or_network_calls": true,
+  "visual_review": "Inspected actual native recolor-nearby, isolate and export-complete screenshots; corrected font fallback, readable controls and explicit saved-render/translation limitations.",
+  "platform": "Linux headless Xorg dummy display; not Windows/macOS validation",
+  "review_fixes": [
+    "Scoped transport keys to viewport/root so focused buttons activate only once.",
+    "Cross-check both render and coverage reports against selection identity, counts, aggregation and scene binding."
+  ],
+  "tests": {
+    "total": 108,
+    "passed": 107,
+    "skipped_cuda": 1,
+    "native_gui_test_executed": true
+  },
+  "desktop_source_sha256": {
+    "desktop.py": "9088e95e440c98d2c9bd7e9bc99e3ec5add06ef88bd905b0983e1e9d24880e74",
+    "desktop_export.py": "5b40087f08d5aed68a0da691bb4593dca84ff6873891b685bc3e5de55c279574",
+    "desktop_scene.py": "474c207c49309e46528d6eb3b4fb7323a5614b2a0277cb8ff159ac8a69f82d44",
+    "desktop_session.py": "44b8f2b7ed0dd0212de696af22cfeb47781fbf354634fb423b5c3e484af75cb1"
+  },
+  "unpacked_smoke": "Linux launch and recolor MP4 export from extracted directory succeeded; Torch/Modal/OpenAI SDKs not imported.",
+  "roadmap": "Exact Phase 3 excerpt requested; unavailable in executor. No numbered-milestone/full-phase completion claim.",
+  "screenshots_sha256": {
+    "01-original.png": "e131dace5764d9390d467e0f47437cb22dbc29e05f3de7e954789e1365f3c415",
+    "02-highlight.png": "2cd2f9fbbcd59d506347faa2001a6960ffa383e915b86bd642f5e919e3495503",
+    "03-isolated.png": "893df098f00e187067b52606bb8b940436cfc097b756a47ee9a5fa2e7a66821d",
+    "04-recolored-nearby.png": "53744363214c2772c534560e6c8f0e27de867e203cebeb2db7169dd92b536bec",
+    "05-end-state.png": "cf94fc7fa194599b5611fa789afd0f9177bf1da924b62983f9315602bc080da1",
+    "06-export-complete.png": "16744678b7e921bfb175e91ee9d7d9bb1792e17b7a1d28dbcd4be886db2f8a1a"
+  },
+  "private_archive_sha256": "65057d36716ec62f637740350a42c75dfe528e857747ff0ad09c38d71bae557a",
+  "private_archive_bytes": 18967504,
+  "asset_publication": "Not authorized; all source renders, screenshots, MP4s and demo archive remain private."
+}

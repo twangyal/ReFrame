@@ -25,7 +25,12 @@ reconstruction quality remains unresolved;
 Phase 2 produced real highlight/recolor videos and a diagnostic translation.
 Gate B is demonstrated via the recolor/highlight fallback; translation exposes
 large residual artifacts, so full clean-move success is not claimed.
-[Phase 2 results](docs/PHASE2.md). [Phase 1 audit](docs/PHASE1.md).
+[Phase 2 results](docs/PHASE2.md).
+
+A native [desktop sample app](docs/DESKTOP.md) now exposes saved-scene playback,
+persistent selection, highlight/isolation, the verified recolor preset, session
+save/reopen and MP4 export. It uses existing GPU renders and makes no model or
+cloud calls. Clean translation is unavailable; this is not a live arbitrary-video editor. [Phase 1 audit](docs/PHASE1.md).
 
 ## Setup and checks
 

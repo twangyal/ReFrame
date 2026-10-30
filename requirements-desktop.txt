@@ -1,0 +1,4 @@
+# Desktop saved-render workflow only; no Torch, CUDA or cloud SDK required.
+# Python 3.11+ with Tk support; FFmpeg/ffprobe must be installed separately.
+numpy==2.3.5
+Pillow==12.1.0
